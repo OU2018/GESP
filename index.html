@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GESP C++ 一级 · printf / scanf 专项训练</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 首页 -->
+    <div id="home-view" class="view active">
+      <div class="home-container">
+        <h1 class="title">GESP C++ 一级</h1>
+        <h2 class="subtitle" id="home-subtitle">printf / scanf 专项训练</h2>
+        <div class="user-greeting" id="user-greeting">你好，<span id="display-name">同学</span></div>
+        <div class="pet-bless" id="pet-bless" style="display:none;"></div>
+        
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">今日正确率</div>
+            <div class="stat-value" id="today-accuracy">--%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">📕 待复习错题</div>
+            <div class="stat-value" id="wrong-count">0题</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">🔥 连续练习</div>
+            <div class="stat-value" id="streak-days">0天</div>
+          </div>
+        </div>
+
+        <div class="progress-hint" id="progress-hint">
+          📈 最近正确率 <span id="trend-text">--</span>
+        </div>
+        <div class="home-pet" id="home-pet" title="点击查看宠物">
+          <span id="home-pet-emoji">🥚</span>
+          <span id="home-pet-label">代码之蛋 · 0 XP</span>
+        </div>
+
+        <!-- 题库选择（下拉） -->
+        <div class="bank-row" id="bank-row">
+          <label class="bank-label" for="bank-select">题库</label>
+          <select id="bank-select" class="bank-select">
+            <option value="printf-scanf">printf / scanf 专项</option>
+            <option value="control-flow">分支 · switch · 循环</option>
+            <option value="computer-basics">计算机基础（一级）</option>
+            <option value="data-ops">变量与运算（一级）</option>
+          </select>
+        </div>
+
+        <!-- 训练模式选择（由 JS 按题库刷新） -->
+        <div class="mode-row" id="mode-row">
+          <button class="mode-btn active" data-mode="mixed">综合训练</button>
+        </div>
+
+        <button class="btn-primary" id="btn-start">开始训练</button>
+        
+        <div class="home-actions">
+          <button class="btn-secondary" id="btn-pet">🐾 我的宠物</button>
+          <button class="btn-secondary" id="btn-achieve">🏅 成就</button>
+          <button class="btn-secondary" id="btn-wrong">📕 错题回顾</button>
+          <button class="btn-secondary" id="btn-history">📊 训练记录</button>
+          <button class="btn-secondary" id="btn-settings">⚙️ 设置</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div id="settings-view" class="view">
+      <div class="panel settings-panel">
+        <h2>设置</h2>
+
+        <h3 class="settings-h">👤 全局设置</h3>
+        <div class="setting-group">
+          <label>你的姓名</label>
+          <input type="text" id="input-user-name" class="text-input" placeholder="例如：小明" maxlength="20">
+          <div class="setting-hint">显示在首页问候与宠物祝福中；也可在 config.js 里配置默认名</div>
+        </div>
+        <div class="setting-group">
+          <label>每题时间</label>
+          <div class="radio-group">
+            <label><input type="radio" name="timePerQ" value="0"> 不限时</label>
+            <label><input type="radio" name="timePerQ" value="15"> 15秒</label>
+            <label><input type="radio" name="timePerQ" value="20" checked> 20秒</label>
+            <label><input type="radio" name="timePerQ" value="30"> 30秒</label>
+            <label><input type="radio" name="timePerQ" value="60"> 60秒</label>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>题目数量</label>
+          <div class="radio-group">
+            <label><input type="radio" name="qCount" value="10"> 10题</label>
+            <label><input type="radio" name="qCount" value="15"> 15题</label>
+            <label><input type="radio" name="qCount" value="20" checked> 20题</label>
+            <label><input type="radio" name="qCount" value="30"> 30题</label>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>答对后自动下一题</label>
+          <div class="radio-group">
+            <label><input type="radio" name="autoNext" value="0"> 关闭</label>
+            <label><input type="radio" name="autoNext" value="1" checked> 1秒</label>
+            <label><input type="radio" name="autoNext" value="2"> 2秒</label>
+            <label><input type="radio" name="autoNext" value="3"> 3秒</label>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>音效</label>
+          <div class="radio-group">
+            <label><input type="radio" name="sound" value="1" checked> 开启</label>
+            <label><input type="radio" name="sound" value="0"> 关闭</label>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>动画特效</label>
+          <div class="radio-group">
+            <label><input type="radio" name="anim" value="1" checked> 开启</label>
+            <label><input type="radio" name="anim" value="0"> 关闭</label>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>宠物进门祝福</label>
+          <div class="radio-group">
+            <label><input type="radio" name="petBless" value="1" checked> 开启</label>
+            <label><input type="radio" name="petBless" value="0"> 关闭</label>
+          </div>
+        </div>
+
+        <h3 class="settings-h">📚 当前题库设置</h3>
+        <div class="setting-hint" id="bank-settings-title" style="margin-bottom:12px;">printf / scanf</div>
+        <div class="setting-group" id="setting-complexity-group">
+          <label>题目复杂度</label>
+          <div class="radio-group">
+            <label><input type="radio" name="complexity" value="1"> 基础</label>
+            <label><input type="radio" name="complexity" value="2" checked> 进阶</label>
+            <label><input type="radio" name="complexity" value="3"> 综合</label>
+          </div>
+          <div class="setting-hint">基础：常用格式符 · 进阶：宽度/精度 · 综合：转义+混合（仅 printf 题库）</div>
+        </div>
+        <div class="setting-group" id="setting-string-group">
+          <label>字符数组 / %s 相关题目</label>
+          <div class="radio-group">
+            <label><input type="radio" name="enableString" value="1"> 开启</label>
+            <label><input type="radio" name="enableString" value="0" checked> 关闭</label>
+          </div>
+          <div class="setting-hint">仅对 printf / scanf 题库生效</div>
+        </div>
+        <div class="setting-group" id="setting-bank-note" style="display:none;">
+          <div class="setting-hint">当前「分支 · 循环」题库为纯静态选择/判断题，无填空与动态生成，复杂度与 %s 开关不适用。</div>
+        </div>
+
+        <button class="btn-primary" id="btn-save-settings">保存并返回</button>
+      </div>
+    </div>
+
+    <!-- 做题页面 -->
+    <div id="quiz-view" class="view">
+      <div class="quiz-header">
+        <div class="quiz-title">GESP C++ 一级 · <span id="mode-label">综合</span></div>
+        <div class="quiz-progress">
+          <span id="q-num">第 1 / 20 题</span>
+          <span id="q-acc">正确率 100%</span>
+          <span id="timer" class="timer">⏱ --s</span>
+        </div>
+      </div>
+      <div class="quiz-body">
+        <div class="question-area">
+          <div class="question-text" id="question-text"></div>
+          <div class="options" id="options"></div>
+          <!-- 填空专用区域 -->
+          <div class="fill-area" id="fill-area" style="display:none;">
+            <input type="text" id="fill-input" class="fill-input" placeholder="在此输入答案" autocomplete="off" spellcheck="false">
+            <button class="btn-submit" id="btn-submit-fill">提交</button>
+          </div>
+        </div>
+        <div class="explain-area" id="explain-area">
+          <div class="explain-placeholder">选择或填写答案后显示解析</div>
+        </div>
+      </div>
+      <div class="quiz-footer">
+        <div class="combo-display" id="combo-display"></div>
+        <div class="xp-display" id="xp-display"></div>
+      </div>
+    </div>
+
+    <!-- 结果页面 -->
+    <div id="result-view" class="view">
+      <div class="result-container">
+        <h1>🎉 训练完成！</h1>
+        <div class="result-stats">
+          <div class="result-item"><span id="r-total">20</span> 题</div>
+          <div class="result-item">答对：<span id="r-correct">0</span> 题</div>
+          <div class="result-item">答错：<span id="r-wrong">0</span> 题</div>
+          <div class="result-item">正确率：<span id="r-acc">0%</span></div>
+          <div class="result-item">最高连击：<span id="r-combo">0</span></div>
+          <div class="result-item">本次获得：+<span id="r-xp">0</span> XP</div>
+          <div class="result-item">用时：<span id="r-time">0秒</span></div>
+        </div>
+        <div class="compare-box" id="compare-box"></div>
+        <div class="result-actions">
+          <button class="btn-primary" id="btn-retry">再练一次</button>
+          <button class="btn-secondary" id="btn-view-wrong">查看错题</button>
+          <button class="btn-secondary" id="btn-home">返回首页</button>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- 宠物页面 -->
+    <div id="pet-view" class="view">
+      <div class="panel pet-panel">
+        <h2>🐾 我的编程宠物</h2>
+        <div class="pet-stage">
+          <div class="pet-emoji" id="pet-emoji">🥚</div>
+          <div class="pet-name" id="pet-name">未知的蛋</div>
+          <div class="pet-level" id="pet-level">Lv.1</div>
+        </div>
+        <div class="pet-bar-wrap">
+          <div class="pet-bar-label"><span>成长进度</span><span id="pet-xp-text">0 / 50 XP</span></div>
+          <div class="pet-bar"><div class="pet-bar-fill" id="pet-bar-fill"></div></div>
+        </div>
+        <div class="pet-stats">
+          <div>累计获得 XP：<strong id="pet-total-xp">0</strong></div>
+          <div>当前形态：<strong id="pet-form">蛋</strong></div>
+          <div>进化路线：<strong id="pet-path-name">幼年期</strong></div>
+          <div class="pet-desc" id="pet-desc">多做题获得 XP，宠物会成长变形哦！</div>
+        </div>
+        <div class="pet-path-select" id="pet-path-select"></div>
+        <h3 style="margin:16px 0 10px;font-size:1rem;color:#94a3b8;">当前路线进化图</h3>
+        <div class="pet-roadmap" id="pet-roadmap"></div>
+        <h3 style="margin:16px 0 10px;font-size:1rem;color:#94a3b8;">全部路线一览</h3>
+        <div class="pet-all-paths" id="pet-all-paths"></div>
+        <button class="btn-secondary" id="btn-pet-back">返回首页</button>
+      </div>
+    </div>
+
+    
+    <!-- 成就页面 -->
+    <div id="achieve-view" class="view">
+      <div class="panel">
+        <h2>🏅 成就解锁</h2>
+        <p class="setting-hint" style="margin-bottom:16px;">完成条件即可解锁，并获得额外 XP（只奖励一次）</p>
+        <div id="achieve-list"></div>
+        <button class="btn-secondary" id="btn-achieve-back">返回首页</button>
+      </div>
+    </div>
+
+    <!-- 错题回顾 -->
+    <div id="wrong-view" class="view">
+      <div class="panel">
+        <h2>📕 错题回顾 <span id="wrong-list-count"></span></h2>
+        <div class="kp-filter" id="kp-filter"></div>
+        <div id="wrong-list"></div>
+        <button class="btn-secondary" id="btn-wrong-back">返回首页</button>
+      </div>
+    </div>
+
+    <!-- 历史记录 -->
+    <div id="history-view" class="view">
+      <div class="panel">
+        <h2>📊 训练记录</h2>
+        <div class="chart-box">
+          <h3>📈 我的正确率（最近10次）</h3>
+          <canvas id="acc-chart" width="400" height="200"></canvas>
+        </div>
+        <div id="history-list"></div>
+        <button class="btn-secondary" id="btn-history-back">返回首页</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-layer"></div>
+  <canvas id="particles"></canvas>
+  <script src="config.js"></script>
+  <script src="banks/printf-scanf.js"></script>
+  <script src="banks/control-flow.js"></script>
+  <script src="banks/computer-basics.js"></script>
+  <script src="banks/data-ops.js"></script>
+  <script src="system/pet.js"></script>
+  <script src="system/achievements.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
