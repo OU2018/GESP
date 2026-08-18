@@ -214,7 +214,141 @@
       options: ["2", "2.5", "3", "0"],
       answer: 1,
       explanation: "有浮点数参与时按浮点除法，得到 2.5。"
+    },
+    {
+      id: 2201, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "综合运算",
+      question: "int a = 17; 则 (a / 5) * (a % 5) 的结果是？",
+      options: ["6", "9", "12", "15"],
+      answer: 0,
+      explanation: "17/5=3，17%5=2，3*2=6。"
+    },
+    {
+      id: 2202, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "数位综合",
+      question: "int n = 472; 个位与十位之和是？",
+      options: ["11", "13", "6", "9"],
+      answer: 3,
+      explanation: "个位 472%10=2，十位 (472/10)%10=7，2+7=9。"
+    },
+    {
+      id: 2203, type: "choice", category: "logic", difficulty: 5, knowledgePoint: "复合逻辑",
+      question: "int x = 4; 表达式 !(x < 3) && (x % 2 == 0) 为？",
+      options: ["真", "假", "4", "编译错误"],
+      answer: 0,
+      explanation: "x<3 假，!假=真；x 为偶数真；与为真。"
+    },
+    {
+      id: 2204, type: "choice", category: "inc", difficulty: 5, knowledgePoint: "前置后置混合",
+      question: "int a = 2; int b = ++a + a++; 之后 a 与 b？（常见未定义行为题，按常见教学约定：先算 ++a）",
+      options: ["a=4,b=6", "a=4,b=5", "a=3,b=5", "结果唯一确定且为 a=3,b=4"],
+      answer: 0,
+      explanation: "教学上常按从左到右：++a 使 a=3 并取值 3，a++ 取值 3 后 a=4，b=6。实际标准中可能未定义，考试按课堂约定。"
+    },
+    {
+      id: 2205, type: "choice", category: "arith", difficulty: 4, knowledgePoint: "浮点整除混合",
+      question: "int a = 5; double b = 2.0; 则 a / 2 + b 更接近？",
+      options: ["4.0", "4.5", "2.5", "3"],
+      answer: 0,
+      explanation: "a/2 为整除得 2，2+2.0=4.0。"
+    },
+    {
+      id: 2206, type: "judge", category: "logic", difficulty: 4, knowledgePoint: "优先级",
+      question: "关系运算的优先级高于逻辑与 &&，低于算术运算。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "算术 > 关系 > 逻辑与/或，大致如此。"
+    },
+    {
+      id: 2207, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "交换思想",
+      question: "int a=3,b=5; a=a+b; b=a-b; a=a-b; 之后 a,b 为？",
+      options: ["3,5", "5,3", "8,3", "8,5"],
+      answer: 1,
+      explanation: "经典无临时变量交换：a=8 后 b=3，a=5。"
+    },
+    {
+      id: 2208, type: "choice", category: "type", difficulty: 4, knowledgePoint: "字符算术",
+      question: "char c = 'A'; 则 c + 1 作为字符输出时通常是？",
+      options: ["A", "B", "66", "编译错误"],
+      answer: 1,
+      explanation: "'A' 的编码+1 为 'B'。"
+    },
+    {
+      id: 2209, type: "choice", category: "logic", difficulty: 5, knowledgePoint: "德摩根",
+      question: "!(a > 0 && b > 0) 等价于？",
+      options: ["a<=0 && b<=0", "a<=0 || b<=0", "a>0 || b>0", "!(a>0) && b>0"],
+      answer: 1,
+      explanation: "德摩根：非(A且B)=非A或非B。"
+    },
+    {
+      id: 2210, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "连续取余",
+      question: "int n = 100; 则 n % 7 % 3 的结果是？",
+      options: ["2", "1", "0", "4"],
+      answer: 0,
+      explanation: "100%7=2，2%3=2。"
     }
+
+  
+    ,
+    { id: 3101, type: "choice", category: "type", difficulty: 4, knowledgePoint: "整型",
+      question: `int a = 7 / 2;\nprintf("%d", a);\n\n输出是？`,
+      options: ["3.5", "3", "4", "3.0"],
+      answer: 1,
+      explanation: "整数除法截断，7/2=3。"
+    },
+    { id: 3102, type: "choice", category: "type", difficulty: 5, knowledgePoint: "强制转换",
+      question: `int a = 7;\ndouble b = (double)a / 2;\nprintf("%.1f", b);\n\n输出是？`,
+      options: ["3.0", "3.5", "4.0", "3"],
+      answer: 1,
+      explanation: "先转为 double 再除，得到 3.5。"
+    },
+    { id: 3103, type: "choice", category: "ops", difficulty: 4, knowledgePoint: "取余",
+      question: `printf("%d", 17 % 5);\n\n输出是？`,
+      options: ["3", "2", "5", "0"],
+      answer: 1,
+      explanation: "17=3×5+2，余 2。"
+    },
+    { id: 3104, type: "choice", category: "ops", difficulty: 5, knowledgePoint: "自增",
+      question: `int a = 3;\nprintf("%d", a++);\nprintf("%d", a);\n\n输出是？`,
+      options: ["33", "34", "44", "43"],
+      answer: 1,
+      explanation: "后置 ++ 先用后加：先输出 3，a 变 4，再输出 4。"
+    },
+    { id: 3105, type: "choice", category: "ops", difficulty: 5, knowledgePoint: "前置自增",
+      question: `int a = 3;\nprintf("%d", ++a);\n\n输出是？`,
+      options: ["3", "4", "2", "33"],
+      answer: 1,
+      explanation: "前置 ++ 先加再用，输出 4。"
+    },
+    { id: 3106, type: "choice", category: "type", difficulty: 4, knowledgePoint: "char",
+      question: `char c = 'A';\nprintf("%d", c);\n\n输出一般是？`,
+      options: ["A", "65", "0", "编译错误"],
+      answer: 1,
+      explanation: "用 %d 输出字符变量时，打印其 ASCII 码，'A' 为 65。"
+    },
+    { id: 3107, type: "choice", category: "ops", difficulty: 4, knowledgePoint: "赋值",
+      question: `int a = 2, b = 3;\na = b = 4;\nprintf("%d%d", a, b);\n\n输出是？`,
+      options: ["23", "44", "34", "24"],
+      answer: 1,
+      explanation: "连续赋值从右向左，a、b 都为 4。"
+    },
+    { id: 3108, type: "judge", category: "type", difficulty: 4, knowledgePoint: "浮点",
+      question: "float 与 double 都是浮点类型，double 通常精度更高。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "double 一般精度与范围更大。"
+    },
+    { id: 3109, type: "choice", category: "ops", difficulty: 5, knowledgePoint: "复合运算",
+      question: `int x = 10;\nx += x -= 2;\nprintf("%d", x);\n\n更合理的理解是？`,
+      options: ["结果一定是 10", "含复合赋值，求值顺序需谨慎", "一定编译错误", "一定输出 0"],
+      answer: 1,
+      explanation: "复合赋值连写依赖求值顺序，考试中应避免依赖未明确顺序的写法；选项强调需谨慎。"
+    },
+    { id: 3110, type: "choice", category: "type", difficulty: 5, knowledgePoint: "溢出概念",
+      question: "整型变量超过其表示范围时，可能出现？",
+      options: ["自动变成小数", "溢出（回绕等现象）", "一定立即关机", "自动变成字符串"],
+      answer: 1,
+      explanation: "整型溢出是常见概念题考点。"
+    }
+
   ];
 
   // 修正 2108 答案

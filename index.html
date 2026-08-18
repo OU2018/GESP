@@ -3,152 +3,288 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GESP C++ 一级 · printf / scanf 专项训练</title>
-  <link rel="stylesheet" href="style.css">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="app-version" content="1.10.28">
+  <title>GESP C++ 一级 · 专项刷题训练</title>
+  <link rel="stylesheet" href="style.css?v=1.10.28">
 </head>
 <body>
   <div id="app">
     <!-- 首页 -->
-    <div id="home-view" class="view active">
-      <div class="home-container">
-        <h1 class="title">GESP C++ 一级</h1>
-        <h2 class="subtitle" id="home-subtitle">printf / scanf 专项训练</h2>
-        <div class="user-greeting" id="user-greeting">你好，<span id="display-name">同学</span></div>
-        <div class="pet-bless" id="pet-bless" style="display:none;"></div>
-        
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-label">今日正确率</div>
-            <div class="stat-value" id="today-accuracy">--%</div>
+        <div id="home-view" class="view active">
+      <div class="home-container home-layout home-v3">
+        <!-- 左：状态 + 打卡 -->
+        <aside class="home-col home-col-left" id="home-col-left">
+          <section class="home-panel panel-hero panel-hero-compact">
+            <h1 class="title title-sm">GESP C++ 一级</h1>
+            <div class="user-greeting" id="user-greeting">你好，<span id="display-name">同学</span></div>
+            <div class="pet-bless" id="pet-bless" style="display:none;"></div>
+            <div class="progress-hint" id="progress-hint">📈 <span id="trend-text">--</span></div>
+          </section>
+          <section class="home-panel panel-checkin">
+            <div class="panel-head panel-head-teal"><span class="panel-icon">📅</span><span>每日打卡</span></div>
+            <div id="daily-checkin-inline" class="daily-checkin-inline"></div>
+          </section>
+        </aside>
+
+        <!-- 中：今日状态 + 模式分页 -->
+        <main class="home-col home-col-center">
+          <section class="home-panel panel-stats panel-stats-center">
+            <div class="panel-head panel-head-blue"><span class="panel-icon">📊</span><span>今日状态</span></div>
+            <div class="stats-row stats-row-lg">
+              <div class="stat-card stat-acc"><div class="stat-label">正确率</div><div class="stat-value" id="today-accuracy">--%</div></div>
+              <div class="stat-card stat-wrong"><div class="stat-label">待复习错题</div><div class="stat-value" id="wrong-count">0题</div></div>
+              <div class="stat-card stat-streak"><div class="stat-label">连续练习</div><div class="stat-value" id="streak-days">0天</div></div>
+            </div>
+            <div class="stats-row stats-row-lg">
+              <div class="stat-card stat-level"><div class="stat-label">个人等级</div><div class="stat-value" id="home-level">Lv.1</div></div>
+              <div class="stat-card"><div class="stat-label">Byte</div><div class="stat-value" id="home-bytes">0B</div></div>
+              <div class="stat-card"><div class="stat-label">趋势</div><div class="stat-value" id="trend-text-center">--</div></div>
+            </div>
+          </section>
+          <div class="home-mode-tabs" id="home-mode-tabs" role="tablist">
+            <button type="button" class="home-mode-tab active" data-home-tab="train" role="tab">🚀 训练</button>
+            <button type="button" class="home-mode-tab" data-home-tab="race" role="tab">⚡ 竞速</button>
+            <button type="button" class="home-mode-tab" data-home-tab="eval" role="tab" id="home-mode-tab-eval" hidden aria-hidden="true">🧪 评测</button>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">📕 待复习错题</div>
-            <div class="stat-value" id="wrong-count">0题</div>
+
+          <div class="home-mode-panel active" id="home-tab-train" role="tabpanel">
+            <section class="home-panel panel-suggest" id="suggest-panel">
+              <div class="panel-head panel-head-violet"><span class="panel-icon">💡</span><span>今日建议</span></div>
+              <div class="suggest-body" id="suggest-body">分析中…</div>
+              <div class="suggest-actions">
+                <button type="button" class="btn-primary btn-sm" id="btn-suggest-start">按建议开始</button>
+                <button type="button" class="btn-secondary btn-sm" id="btn-suggest-wrong">优先清错题</button>
+              </div>
+              <p class="setting-hint" id="suggest-hint">主线是客观题查缺补漏；养成可稍后再看。</p>
+            </section>
+            <section class="home-panel panel-train">
+              <div class="panel-head panel-head-violet"><span class="panel-icon">🚀</span><span>开始训练</span></div>
+              <p class="setting-hint" id="home-subtitle">选择题库，开始训练</p>
+              <div class="bank-row" id="bank-row">
+                <label class="bank-label" for="bank-select">题库</label>
+                <select id="bank-select" class="bank-select bank-select-lg">
+                  <option value="printf-scanf">printf / scanf</option>
+                  <option value="control-flow">分支 · switch · 循环</option>
+                  <option value="data-ops">变量与运算</option>
+                  <option value="computer-basics">计算机基础</option>
+                  <option value="real-exam">近年真题风格</option>
+                  <option value="gesp2-ascii-cast">二级 · ASCII与类型转换</option>
+                </select>
+              </div>
+              <div class="mode-row" id="mode-row"></div>
+              <button class="btn-primary btn-start-lg" id="btn-start">▶ 开始训练</button>
+              <div class="home-actions home-actions-lg">
+                <button class="btn-primary btn-action" id="btn-wrong">📕 清错题 <span id="wrong-btn-badge" class="mini-badge">0</span></button>
+                <button class="btn-secondary btn-action" id="btn-history">📊 训练记录</button>
+                <button class="btn-secondary btn-action" id="btn-settings">⚙️ 设置</button>
+              </div>
+            </section>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">🔥 连续练习</div>
-            <div class="stat-value" id="streak-days">0天</div>
+
+          <div class="home-mode-panel" id="home-tab-race" role="tabpanel" hidden>
+            <section class="home-panel panel-race">
+              <div class="panel-head panel-head-rose">
+                <span class="panel-icon">⚡</span><span>竞速模式</span>
+                <span class="race-remain" id="race-remain">今日剩余 3/3</span>
+              </div>
+              <p class="setting-hint race-hint">高难度冲刺 · 点「开始竞速」即消耗 1 次机会（每日 3 次）</p>
+              <div class="race-row">
+                <label>题库</label>
+                <select id="race-bank" class="bank-select bank-select-lg">
+                  <option value="all">综合全库（最难）</option>
+                  <option value="printf-scanf">printf / scanf</option>
+                  <option value="control-flow">分支 · 循环</option>
+                  <option value="data-ops">变量与运算</option>
+                  <option value="computer-basics">计算机基础</option>
+                  <option value="real-exam">近年真题风格</option>
+                  <option value="gesp2-ascii-cast">二级 · ASCII与类型转换</option>
+                </select>
+              </div>
+              <div class="race-row race-opts">
+                <label class="race-check"><input type="checkbox" id="race-only5" checked> 只出 ★★★★★ 五星题</label>
+              </div>
+              <div class="race-max" id="race-max-info">可出题量：计算中…</div>
+              <button class="btn-primary btn-race-lg" id="btn-race-start">⚡ 开始竞速</button>
+            </section>
           </div>
-        </div>
 
-        <div class="progress-hint" id="progress-hint">
-          📈 最近正确率 <span id="trend-text">--</span>
-        </div>
-        <div class="home-pet" id="home-pet" title="点击查看宠物">
-          <span id="home-pet-emoji">🥚</span>
-          <span id="home-pet-label">代码之蛋 · 0 XP</span>
-        </div>
+          <div class="home-mode-panel" id="home-tab-eval" role="tabpanel" hidden aria-hidden="true">
+            <section class="home-panel panel-eval" id="eval-mode-panel">
+              <div class="panel-head panel-head-teal">
+                <span class="panel-icon">🧪</span><span>评测模式</span>
+                <span class="race-remain" id="eval-badge">已激活</span>
+              </div>
+              <p class="setting-hint race-hint">固定题集 · 每次打乱顺序 · 不计入每日打卡</p>
+              <div class="race-max" id="eval-max-info">固定题量：加载中…</div>
+              <button class="btn-primary btn-race-lg" id="btn-eval-start">🧪 开始评测</button>
+            </section>
+          </div>
+        </main>
 
-        <!-- 题库选择（下拉） -->
-        <div class="bank-row" id="bank-row">
-          <label class="bank-label" for="bank-select">题库</label>
-          <select id="bank-select" class="bank-select">
-            <option value="printf-scanf">printf / scanf 专项</option>
-            <option value="control-flow">分支 · switch · 循环</option>
-            <option value="computer-basics">计算机基础（一级）</option>
-            <option value="data-ops">变量与运算（一级）</option>
-          </select>
-        </div>
-
-        <!-- 训练模式选择（由 JS 按题库刷新） -->
-        <div class="mode-row" id="mode-row">
-          <button class="mode-btn active" data-mode="mixed">综合训练</button>
-        </div>
-
-        <button class="btn-primary" id="btn-start">开始训练</button>
-        
-        <div class="home-actions">
-          <button class="btn-secondary" id="btn-pet">🐾 我的宠物</button>
-          <button class="btn-secondary" id="btn-achieve">🏅 成就</button>
-          <button class="btn-secondary" id="btn-wrong">📕 错题回顾</button>
-          <button class="btn-secondary" id="btn-history">📊 训练记录</button>
-          <button class="btn-secondary" id="btn-settings">⚙️ 设置</button>
-        </div>
+        <!-- 右：辅助入口 -->
+        <aside class="home-col home-col-right home-panel panel-pet">
+          <div class="panel-head panel-head-amber"><span class="panel-icon">🐾</span><span>进程（可选）</span></div>
+          <div class="home-pet-panel" id="home-pet" style="cursor:pointer;" title="养成辅助，非刷题主线">
+            <div class="home-pet-emoji" id="home-pet-emoji">💾</div>
+            <div class="home-pet-label" id="home-pet-label">加载中…</div>
+          </div>
+          <button class="btn-secondary btn-side-lg" id="btn-pet">进程管理</button>
+          <button class="btn-secondary btn-side-lg" id="btn-mail">📧 邮件 <span class="badge-num" data-mail-badge style="display:none;"></span></button>
+          <button class="btn-secondary btn-side-lg" id="btn-codex">📖 词条</button>
+          <button class="btn-secondary btn-side-lg" id="btn-achieve">🏅 成就</button>
+          <button class="btn-secondary btn-side-lg" id="btn-changelog">📝 更新</button>
+        </aside>
       </div>
     </div>
 
-    <!-- 设置面板 -->
+<!-- 设置面板 -->
     <div id="settings-view" class="view">
-      <div class="panel settings-panel">
-        <h2>设置</h2>
+      <div class="panel settings-panel subpage-panel panel-settings">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-settings-back">← 首页</button><span class="subpage-top-title">⚙️ 设置</span></div>
+        <div class="panel-head panel-head-blue"><span class="panel-icon">⚙️</span><span>设置</span></div>
+        <div class="settings-progress" id="settings-progress"></div>
+        <h2 class="sr-only">设置</h2>
 
-        <h3 class="settings-h">👤 全局设置</h3>
-        <div class="setting-group">
-          <label>你的姓名</label>
-          <input type="text" id="input-user-name" class="text-input" placeholder="例如：小明" maxlength="20">
-          <div class="setting-hint">显示在首页问候与宠物祝福中；也可在 config.js 里配置默认名</div>
-        </div>
-        <div class="setting-group">
-          <label>每题时间</label>
-          <div class="radio-group">
-            <label><input type="radio" name="timePerQ" value="0"> 不限时</label>
-            <label><input type="radio" name="timePerQ" value="15"> 15秒</label>
-            <label><input type="radio" name="timePerQ" value="20" checked> 20秒</label>
-            <label><input type="radio" name="timePerQ" value="30"> 30秒</label>
-            <label><input type="radio" name="timePerQ" value="60"> 60秒</label>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>题目数量</label>
-          <div class="radio-group">
-            <label><input type="radio" name="qCount" value="10"> 10题</label>
-            <label><input type="radio" name="qCount" value="15"> 15题</label>
-            <label><input type="radio" name="qCount" value="20" checked> 20题</label>
-            <label><input type="radio" name="qCount" value="30"> 30题</label>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>答对后自动下一题</label>
-          <div class="radio-group">
-            <label><input type="radio" name="autoNext" value="0"> 关闭</label>
-            <label><input type="radio" name="autoNext" value="1" checked> 1秒</label>
-            <label><input type="radio" name="autoNext" value="2"> 2秒</label>
-            <label><input type="radio" name="autoNext" value="3"> 3秒</label>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>音效</label>
-          <div class="radio-group">
-            <label><input type="radio" name="sound" value="1" checked> 开启</label>
-            <label><input type="radio" name="sound" value="0"> 关闭</label>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>动画特效</label>
-          <div class="radio-group">
-            <label><input type="radio" name="anim" value="1" checked> 开启</label>
-            <label><input type="radio" name="anim" value="0"> 关闭</label>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>宠物进门祝福</label>
-          <div class="radio-group">
-            <label><input type="radio" name="petBless" value="1" checked> 开启</label>
-            <label><input type="radio" name="petBless" value="0"> 关闭</label>
-          </div>
+        <div class="tab-bar" id="settings-tabs" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="global" role="tab">👤 全局设置</button>
+          <button type="button" class="tab-btn" data-tab="bank" role="tab">📚 题库设置</button>
         </div>
 
-        <h3 class="settings-h">📚 当前题库设置</h3>
-        <div class="setting-hint" id="bank-settings-title" style="margin-bottom:12px;">printf / scanf</div>
-        <div class="setting-group" id="setting-complexity-group">
-          <label>题目复杂度</label>
-          <div class="radio-group">
-            <label><input type="radio" name="complexity" value="1"> 基础</label>
-            <label><input type="radio" name="complexity" value="2" checked> 进阶</label>
-            <label><input type="radio" name="complexity" value="3"> 综合</label>
+        <div class="tab-panel active" id="settings-tab-global" role="tabpanel">
+          <div class="setting-group">
+            <label>你的姓名</label>
+            <input type="text" id="input-user-name" class="text-input" placeholder="例如：小明" maxlength="20">
+            <div class="setting-hint">显示在首页问候与宠物祝福中；也可在 config.js 里配置默认名</div>
           </div>
-          <div class="setting-hint">基础：常用格式符 · 进阶：宽度/精度 · 综合：转义+混合（仅 printf 题库）</div>
-        </div>
-        <div class="setting-group" id="setting-string-group">
-          <label>字符数组 / %s 相关题目</label>
-          <div class="radio-group">
-            <label><input type="radio" name="enableString" value="1"> 开启</label>
-            <label><input type="radio" name="enableString" value="0" checked> 关闭</label>
+          <div class="setting-group">
+            <label>每题时间</label>
+            <div class="radio-group">
+              <label><input type="radio" name="timePerQ" value="0"> 不限时</label>
+              <label><input type="radio" name="timePerQ" value="15"> 15秒</label>
+              <label><input type="radio" name="timePerQ" value="20" checked> 20秒</label>
+              <label><input type="radio" name="timePerQ" value="30"> 30秒</label>
+              <label><input type="radio" name="timePerQ" value="60"> 60秒</label>
+            </div>
           </div>
-          <div class="setting-hint">仅对 printf / scanf 题库生效</div>
+          <div class="setting-group">
+            <label>题目数量</label>
+            <div class="radio-group">
+              <label><input type="radio" name="qCount" value="10"> 10题</label>
+              <label><input type="radio" name="qCount" value="15"> 15题</label>
+              <label><input type="radio" name="qCount" value="20" checked> 20题</label>
+              <label><input type="radio" name="qCount" value="30"> 30题</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>答对后自动下一题</label>
+            <div class="radio-group">
+              <label><input type="radio" name="autoNext" value="0"> 关闭</label>
+              <label><input type="radio" name="autoNext" value="1" checked> 1秒</label>
+              <label><input type="radio" name="autoNext" value="2"> 2秒</label>
+              <label><input type="radio" name="autoNext" value="3"> 3秒</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>音效总开关</label>
+            <div class="radio-group">
+              <label><input type="radio" name="sound" value="1" checked> 开启</label>
+              <label><input type="radio" name="sound" value="0"> 关闭</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>音量 <span id="sound-vol-label">70%</span></label>
+            <input type="range" id="setting-sound-volume" min="0" max="100" value="70" style="width:100%;">
+          </div>
+          <div class="setting-group">
+            <label>答题音效</label>
+            <div class="radio-group">
+              <label><input type="radio" name="soundQuiz" value="1" checked> 开</label>
+              <label><input type="radio" name="soundQuiz" value="0"> 关</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>界面 / 宠物音效</label>
+            <div class="radio-group">
+              <label><input type="radio" name="soundUi" value="1" checked> 开</label>
+              <label><input type="radio" name="soundUi" value="0"> 关</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <button type="button" class="btn-secondary btn-sm" id="btn-test-sound">试听音效</button>
+          </div>
+          <div class="setting-group">
+            <label>激活码</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <input type="text" id="setting-activate-code" placeholder="输入激活码" autocomplete="off" spellcheck="false" style="flex:1;min-width:160px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);">
+              <button type="button" class="btn-primary btn-sm" id="btn-redeem-code">兑换</button>
+            </div>
+            <div class="setting-hint">可解锁评测模式、道具等（大小写敏感，每码仅一次）</div>
+          </div>
+          <div class="setting-group">
+            <label>动画特效</label>
+            <div class="radio-group">
+              <label><input type="radio" name="anim" value="1" checked> 开启</label>
+              <label><input type="radio" name="anim" value="0"> 关闭</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>孵化过场动画</label>
+            <div class="radio-group">
+              <label><input type="radio" name="hatchAnim" value="1" checked> 开启</label>
+              <label><input type="radio" name="hatchAnim" value="0"> 关闭</label>
+            </div>
+            <div class="setting-hint">蛋弹跳 → 碎裂发光 → 宠物现身（可单独关闭）</div>
+          </div>
+          <div class="setting-group">
+            <label>宠物进门祝福</label>
+            <div class="radio-group">
+              <label><input type="radio" name="petBless" value="1" checked> 开启</label>
+              <label><input type="radio" name="petBless" value="0"> 关闭</label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <label>专注模式</label>
+            <div class="radio-group">
+              <label><input type="radio" name="focusMode" value="1"> 开启</label>
+              <label><input type="radio" name="focusMode" value="0" checked> 关闭</label>
+            </div>
+            <div class="setting-hint">隐藏宠物/邮件/词条等辅助入口，突出刷题与错题；养成仍可从结算偶尔获得奖励</div>
+          </div>
+          <div class="setting-group">
+            <label>词条严格模式</label>
+            <div class="radio-group">
+              <label><input type="radio" name="strictMode" value="1" checked> 开启（默认）</label>
+              <label><input type="radio" name="strictMode" value="0"> 关闭</label>
+            </div>
+            <div class="setting-hint">首次阅读词条时，切换或关闭会弹出小问答；答错将强制停留阅读 5 秒</div>
+          </div>
         </div>
-        <div class="setting-group" id="setting-bank-note" style="display:none;">
-          <div class="setting-hint">当前「分支 · 循环」题库为纯静态选择/判断题，无填空与动态生成，复杂度与 %s 开关不适用。</div>
+
+        <div class="tab-panel" id="settings-tab-bank" role="tabpanel">
+          <div class="setting-hint" id="bank-settings-title" style="margin-bottom:12px;">printf / scanf</div>
+          <div class="setting-group" id="setting-complexity-group">
+            <label>题目复杂度</label>
+            <div class="radio-group">
+              <label><input type="radio" name="complexity" value="1"> 基础</label>
+              <label><input type="radio" name="complexity" value="2" checked> 进阶</label>
+              <label><input type="radio" name="complexity" value="3"> 综合</label>
+            </div>
+            <div class="setting-hint">基础：常用格式符 · 进阶：宽度/精度 · 综合：转义+混合（仅 printf 题库）</div>
+          </div>
+          <div class="setting-group" id="setting-string-group">
+            <label>字符数组 / %s 相关题目</label>
+            <div class="radio-group">
+              <label><input type="radio" name="enableString" value="1"> 开启</label>
+              <label><input type="radio" name="enableString" value="0" checked> 关闭</label>
+            </div>
+            <div class="setting-hint">仅对 printf / scanf 题库生效</div>
+          </div>
+          <div class="setting-group" id="setting-bank-note" style="display:none;">
+            <div class="setting-hint">当前题库为纯静态选择/判断题，无填空与动态生成，复杂度与 %s 开关不适用。</div>
+          </div>
         </div>
 
         <button class="btn-primary" id="btn-save-settings">保存并返回</button>
@@ -158,7 +294,7 @@
     <!-- 做题页面 -->
     <div id="quiz-view" class="view">
       <div class="quiz-header">
-        <div class="quiz-title">GESP C++ 一级 · <span id="mode-label">综合</span></div>
+        <div class="quiz-title">GESP · <span id="mode-label">训练</span></div>
         <div class="quiz-progress">
           <span id="q-num">第 1 / 20 题</span>
           <span id="q-acc">正确率 100%</span>
@@ -198,7 +334,9 @@
           <div class="result-item">本次获得：+<span id="r-xp">0</span> XP</div>
           <div class="result-item">用时：<span id="r-time">0秒</span></div>
         </div>
+        <div class="result-kp" id="result-kp"></div>
         <div class="compare-box" id="compare-box"></div>
+        <p class="setting-hint result-focus-hint" id="result-focus-hint"></p>
         <div class="result-actions">
           <button class="btn-primary" id="btn-retry">再练一次</button>
           <button class="btn-secondary" id="btn-view-wrong">查看错题</button>
@@ -208,78 +346,253 @@
     </div>
 
     
-    <!-- 宠物页面 -->
+    <!-- 宠物页面：左右分栏 -->
     <div id="pet-view" class="view">
-      <div class="panel pet-panel">
-        <h2>🐾 我的编程宠物</h2>
-        <div class="pet-stage">
-          <div class="pet-emoji" id="pet-emoji">🥚</div>
-          <div class="pet-name" id="pet-name">未知的蛋</div>
-          <div class="pet-level" id="pet-level">Lv.1</div>
+      <div class="pet-page-wrap">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-pet-back-top">← 首页</button><span class="subpage-top-title">🐾 进程管理</span></div>
+        <div class="pet-layout">
+          <aside class="pet-side pet-side-left">
+            <div class="col-title">当前 main</div>
+            <div id="pet-main-preview" class="pet-main-preview">
+              <div class="pet-main-emoji" id="pet-main-emoji">💾</div>
+              <div class="pet-main-name" id="pet-main-name">未绑定</div>
+              <div class="pet-main-meta" id="pet-main-meta"></div>
+            </div>
+            <div id="pet-res-bar" class="pet-res-bar"></div>
+            <button class="btn-secondary" id="btn-pet-back" style="width:100%;margin-top:12px;">返回首页</button>
+          </aside>
+          <section class="pet-side pet-side-right">
+            <div id="pet-page-root"></div>
+          </section>
         </div>
-        <div class="pet-bar-wrap">
-          <div class="pet-bar-label"><span>成长进度</span><span id="pet-xp-text">0 / 50 XP</span></div>
-          <div class="pet-bar"><div class="pet-bar-fill" id="pet-bar-fill"></div></div>
-        </div>
-        <div class="pet-stats">
-          <div>累计获得 XP：<strong id="pet-total-xp">0</strong></div>
-          <div>当前形态：<strong id="pet-form">蛋</strong></div>
-          <div>进化路线：<strong id="pet-path-name">幼年期</strong></div>
-          <div class="pet-desc" id="pet-desc">多做题获得 XP，宠物会成长变形哦！</div>
-        </div>
-        <div class="pet-path-select" id="pet-path-select"></div>
-        <h3 style="margin:16px 0 10px;font-size:1rem;color:#94a3b8;">当前路线进化图</h3>
-        <div class="pet-roadmap" id="pet-roadmap"></div>
-        <h3 style="margin:16px 0 10px;font-size:1rem;color:#94a3b8;">全部路线一览</h3>
-        <div class="pet-all-paths" id="pet-all-paths"></div>
-        <button class="btn-secondary" id="btn-pet-back">返回首页</button>
       </div>
     </div>
 
     
+    <!-- 更新历史 -->
+    <div id="changelog-view" class="view">
+      <div class="panel home-panel panel-changelog subpage-panel">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-changelog-back-top">← 首页</button><span class="subpage-top-title">📝 更新</span></div>
+        <div class="panel-head panel-head-blue"><span class="panel-icon">📝</span><span>更新历史</span></div>
+        <p class="setting-hint">记录正式功能变更（不含调试与测试入口）</p>
+        <div id="changelog-list" class="changelog-list"></div>
+        <button class="btn-secondary btn-action" id="btn-changelog-back">返回首页</button>
+      </div>
+    </div>
+
+    <!-- 词条图鉴 -->
+    <div id="codex-view" class="view">
+      <div class="panel home-panel panel-codex subpage-panel panel-codex-full">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-codex-back-top">← 首页</button><span class="subpage-top-title">📖 词条</span></div>
+        <div class="panel-head panel-head-purple"><span class="panel-icon">📖</span><span>词条图鉴 · GESP 一级基础</span></div>
+        <p class="setting-hint">计算机发展、硬件软件、数制与网络等常识。阅读达标可触发特殊精灵邮件任务。</p>
+        <div id="codex-root"></div>
+        <button class="btn-secondary btn-action" id="btn-codex-back">返回首页</button>
+      </div>
+    </div>
+
+    <!-- 邮件页面 -->
+    <div id="mail-view" class="view">
+      <div class="panel home-panel panel-mail subpage-panel">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-mail-back-top">← 首页</button><span class="subpage-top-title">📧 邮件</span></div>
+        <div class="panel-head panel-head-cyan"><span class="panel-icon">📧</span><span>收件箱</span>
+          <button type="button" class="btn-secondary btn-sm" id="btn-mail-allread" style="margin-left:auto;">全部已读</button>
+        </div>
+        <p class="setting-hint">生日、节日、等级等特殊邮件会自动送达（规则写在 system/mail-data.js）</p>
+        <div id="mail-list" class="mail-list"></div>
+        <button class="btn-secondary btn-action" id="btn-mail-back">返回首页</button>
+      </div>
+    </div>
+
     <!-- 成就页面 -->
     <div id="achieve-view" class="view">
-      <div class="panel">
-        <h2>🏅 成就解锁</h2>
-        <p class="setting-hint" style="margin-bottom:16px;">完成条件即可解锁，并获得额外 XP（只奖励一次）</p>
-        <div id="achieve-list"></div>
-        <button class="btn-secondary" id="btn-achieve-back">返回首页</button>
+      <div class="panel home-panel panel-achieve subpage-panel">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-achieve-back-top">← 首页</button><span class="subpage-top-title">🏅 成就</span></div>
+        <div class="panel-head panel-head-amber"><span class="panel-icon">🏅</span><span>成就解锁</span></div>
+        <p class="setting-hint" style="margin-bottom:12px;">完成条件即可解锁，并获得额外 XP / Byte（只奖励一次）</p>
+        <div id="achieve-list" class="achieve-list"></div>
+        <div class="pager" id="achieve-pager"></div>
+        <button class="btn-secondary btn-action" id="btn-achieve-back">返回首页</button>
       </div>
     </div>
 
     <!-- 错题回顾 -->
     <div id="wrong-view" class="view">
-      <div class="panel">
-        <h2>📕 错题回顾 <span id="wrong-list-count"></span></h2>
+      <div class="panel home-panel panel-wrong subpage-panel">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-wrong-back-top">← 首页</button><span class="subpage-top-title">📕 错题回顾</span></div>
+        <div class="panel-head panel-head-rose"><span class="panel-icon">📕</span><span>错题回顾 <span id="wrong-list-count"></span></span></div>
         <div class="kp-filter" id="kp-filter"></div>
         <div id="wrong-list"></div>
-        <button class="btn-secondary" id="btn-wrong-back">返回首页</button>
+        <div class="pager" id="wrong-pager"></div>
+        <button class="btn-secondary btn-action" id="btn-wrong-back">返回首页</button>
       </div>
     </div>
 
     <!-- 历史记录 -->
     <div id="history-view" class="view">
-      <div class="panel">
-        <h2>📊 训练记录</h2>
+      <div class="panel home-panel panel-history subpage-panel">
+        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-history-back-top">← 首页</button><span class="subpage-top-title">📊 训练记录</span></div>
+        <div class="panel-head panel-head-blue"><span class="panel-icon">📊</span><span>训练记录</span></div>
         <div class="chart-box">
-          <h3>📈 我的正确率（最近10次）</h3>
+          <h3>📈 正确率趋势（最近10次）</h3>
           <canvas id="acc-chart" width="400" height="200"></canvas>
         </div>
         <div id="history-list"></div>
-        <button class="btn-secondary" id="btn-history-back">返回首页</button>
+        <div class="pager" id="history-pager"></div>
+        <button class="btn-secondary btn-action" id="btn-history-back">返回首页</button>
       </div>
     </div>
   </div>
 
+  <!-- 页脚版本 -->
+
+  <!-- 右侧可折叠：每日打卡 -->
+  <aside id="daily-checkin" class="daily-checkin-panel">
+    <button type="button" class="daily-checkin-toggle" id="daily-checkin-toggle" title="展开/收起打卡">📅</button>
+    <div class="daily-checkin-body">
+      <div class="daily-checkin-head">
+        <span>📅 每日题库打卡</span>
+        <span class="daily-checkin-date" id="daily-checkin-date"></span>
+      </div>
+      <div class="daily-checkin-list" id="daily-checkin-list"></div>
+      <div class="daily-checkin-tip" id="daily-checkin-tip">正确率高可少做，正确率低需多练</div>
+    </div>
+  </aside>
+
+  <footer id="site-footer" class="site-footer">
+    <span>GESP 专项训练</span>
+    <span class="footer-dot">·</span>
+    <span id="footer-version">v—</span>
+  </footer>
+
+  <!-- Esc 隐藏调试菜单 -->
+  <div id="debug-panel" class="debug-panel" style="display:none;" aria-hidden="true">
+    <div class="debug-backdrop" id="debug-backdrop"></div>
+    <div class="debug-card">
+      <div class="debug-head">
+        <h3>🔧 隐藏菜单 <span id="debug-ver" class="debug-ver"></span></h3>
+        <button type="button" class="debug-close" id="debug-close">关闭</button>
+      </div>
+      <p class="debug-hint">按 Esc 开关 · 仅供教师测试</p>
+      <div class="debug-section">
+        <h4>题库</h4>
+        <div class="tab-bar tab-bar-scroll" id="debug-bank-tabs" role="tablist"></div>
+        <div id="debug-bank-meta" class="setting-hint" style="margin:8px 0;"></div>
+        <div id="debug-preview" class="debug-preview">加载中…</div>
+      </div>
+
+      <div class="debug-section" id="debug-test-section">
+        <h4>系统测试</h4>
+        <p class="debug-hint">手动触发难复现的逻辑（邮件、经济、宠物等）</p>
+        <div class="tab-bar tab-bar-scroll" id="debug-test-tabs"></div>
+        <div id="debug-test-cmds" class="debug-test-cmds"></div>
+        <div id="debug-test-log" class="debug-test-log"></div>
+      </div>
+      <div class="debug-section debug-actions">
+        <button type="button" class="btn-secondary" id="debug-clear-recent">清空近期去重记录</button>
+        <button type="button" class="btn-secondary" id="debug-export-stats">导出本地统计 JSON</button>
+        <button type="button" class="btn-secondary" id="debug-validate-bank">🧪 题库自检（选项重复等）</button>
+        <div id="debug-validate-result" class="debug-validate-result" style="margin-top:10px;"></div>
+        <button type="button" class="btn-secondary btn-danger" id="debug-reset-all">⚠️ 重置全部本地数据</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="codex-quiz-modal" class="codex-quiz-modal" style="display:none;" aria-hidden="true">
+    <div class="codex-quiz-wrap">
+      <div class="codex-quiz-card">
+        <div class="codex-quiz-title">词条确认问答</div>
+        <div class="codex-quiz-q" id="codex-quiz-q"></div>
+        <div class="codex-quiz-opts" id="codex-quiz-opts"></div>
+        <div class="codex-quiz-msg" id="codex-quiz-msg"></div>
+      </div>
+      <div class="codex-quiz-side" id="codex-quiz-side" hidden>
+        <div class="codex-quiz-side-head" id="codex-quiz-side-head"></div>
+        <div class="codex-quiz-side-body" id="codex-quiz-side-body"></div>
+        <div class="setting-hint" id="codex-force-timer">请阅读 5 秒…</div>
+      </div>
+    </div>
+  </div>
   <div id="toast-layer"></div>
   <canvas id="particles"></canvas>
-  <script src="config.js"></script>
-  <script src="banks/printf-scanf.js"></script>
-  <script src="banks/control-flow.js"></script>
-  <script src="banks/computer-basics.js"></script>
-  <script src="banks/data-ops.js"></script>
-  <script src="system/pet.js"></script>
-  <script src="system/achievements.js"></script>
-  <script src="script.js"></script>
+    <script>
+(function () {
+  var EMBEDDED = "1.10.28";
+  try {
+    var forced = localStorage.getItem("gesp_force_reload");
+    if (forced && forced === EMBEDDED) localStorage.removeItem("gesp_force_reload");
+  } catch (e) {}
+  window.__GESP_ASSET_VER = EMBEDDED;
+  function clearAndReload() {
+    try {
+      if (sessionStorage.getItem("gesp_reload_" + EMBEDDED)) return;
+      sessionStorage.setItem("gesp_reload_" + EMBEDDED, "1");
+    } catch (e) {}
+    function go() {
+      var path = location.pathname;
+      location.replace(path + "?v=1.10.28&_t=" + Date.now());
+    }
+    var tasks = [];
+    try {
+      if (window.caches && caches.keys) {
+        tasks.push(caches.keys().then(function (keys) {
+          return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+        }));
+      }
+    } catch (e) {}
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+        tasks.push(navigator.serviceWorker.getRegistrations().then(function (regs) {
+          return Promise.all(regs.map(function (r) { return r.unregister(); }));
+        }));
+      }
+    } catch (e) {}
+    Promise.all(tasks).then(go).catch(go);
+  }
+  try {
+    if ("serviceWorker" in navigator && /^https?:$/i.test(location.protocol)) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        regs.forEach(function (r) { r.unregister(); });
+      }).catch(function () {});
+    }
+  } catch (e) {}
+  try {
+    fetch("config.js?_=" + Date.now(), { cache: "no-store", credentials: "same-origin" })
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var m = text.match(/version:\s*"([^"]+)"/);
+        if (!m) return;
+        var remote = m[1];
+        window.__GESP_REMOTE_VER = remote;
+        try { localStorage.setItem("gesp_asset_version", remote); } catch (e) {}
+        if (remote !== EMBEDDED) {
+          console.info("[GESP] version mismatch local=", EMBEDDED, " remote=", remote);
+          try { localStorage.setItem("gesp_force_reload", remote); } catch (e) {}
+          clearAndReload();
+        }
+      })
+      .catch(function () {});
+  } catch (e) {}
+})();
+</script>
+
+<script src="config.js?v=1.10.28"></script>
+  <script src="banks/printf-scanf.js?v=1.10.28"></script>
+  <script src="banks/control-flow.js?v=1.10.28"></script>
+  <script src="banks/eval-mode.js?v=1.10.28"></script>
+  <script src="banks/real-exam.js?v=1.10.28"></script>
+  <script src="banks/computer-basics.js?v=1.10.28"></script>
+  <script src="banks/gesp2-ascii-cast.js?v=1.10.28"></script>
+  <script src="banks/data-ops.js?v=1.10.28"></script>
+  <script src="system/pet-data.js?v=1.10.28"></script>
+  <script src="system/pet.js?v=1.10.28"></script>
+  <script src="system/activate-codes.js?v=1.10.28"></script>
+  <script src="system/changelog.js?v=1.10.28"></script>
+  <script src="system/codex-data.js?v=1.10.28"></script>
+  <script src="system/codex.js?v=1.10.28"></script>
+  <script src="system/mail-data.js?v=1.10.28"></script>
+  <script src="system/mail.js?v=1.10.28"></script>
+  <script src="system/achievements.js?v=1.10.28"></script>
+  <script src="script.js?v=1.10.28"></script>
 </body>
 </html>

@@ -9,28 +9,28 @@
   const STATIC_CONTROL_FLOW = [
     // ========== if / else ==========
     {
-      id: 1001, type: "choice", category: "branch", difficulty: 3, knowledgePoint: "if 基本",
+      id: 1001, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "if 基本",
       question: `int x = 5;\nif (x > 3)\n  printf("A");\nelse\n  printf("B");\n\n输出是？`,
       options: ["A", "B", "AB", "无输出"],
       answer: 0,
       explanation: "x>3 成立，执行 if 分支，输出 A。"
     },
     {
-      id: 1002, type: "choice", category: "branch", difficulty: 3, knowledgePoint: "if-else",
+      id: 1002, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "if-else",
       question: `int n = 0;\nif (n)\n  printf("yes");\nelse\n  printf("no");\n\n输出是？`,
       options: ["yes", "no", "yesno", "编译错误"],
       answer: 1,
       explanation: "在 if 条件中，0 视为假，走 else，输出 no。"
     },
     {
-      id: 1003, type: "choice", category: "branch", difficulty: 3, knowledgePoint: "else if",
+      id: 1003, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "else if",
       question: `int s = 85;\nif (s >= 90) printf("A");\nelse if (s >= 80) printf("B");\nelse printf("C");\n\n输出是？`,
       options: ["A", "B", "C", "BC"],
       answer: 1,
       explanation: "85 不满足 >=90，但满足 >=80，输出 B。不会再执行后面的 else。"
     },
     {
-      id: 1004, type: "judge", category: "branch", difficulty: 3, knowledgePoint: "if 花括号",
+      id: 1004, type: "judge", category: "branch", difficulty: 4, knowledgePoint: "if 花括号",
       question: `下面代码中，printf("B") 一定属于 else 分支。\n\nint x = 1;\nif (x > 0)\n  printf("A");\n  printf("B");\nelse\n  printf("C");`,
       options: ["正确", "错误"],
       answer: 1,
@@ -51,7 +51,7 @@
       explanation: "这里是赋值 x=0，不是比较。赋值表达式结果为 0，条件为假，输出 F。（常见笔误）"
     },
     {
-      id: 1007, type: "judge", category: "branch", difficulty: 3, knowledgePoint: "if 真假",
+      id: 1007, type: "judge", category: "branch", difficulty: 4, knowledgePoint: "if 真假",
       question: `在 C++ 中，if (1) 的条件为真，会执行 if 后面的语句。`,
       options: ["正确", "错误"],
       answer: 0,
@@ -76,7 +76,7 @@
 
     // ========== switch ==========
     {
-      id: 1101, type: "choice", category: "switch", difficulty: 3, knowledgePoint: "switch 基本",
+      id: 1101, type: "choice", category: "switch", difficulty: 4, knowledgePoint: "switch 基本",
       question: `int n = 2;\nswitch (n) {\n  case 1: printf("A"); break;\n  case 2: printf("B"); break;\n  default: printf("C");\n}\n\n输出是？`,
       options: ["A", "B", "C", "BC"],
       answer: 1,
@@ -90,14 +90,14 @@
       explanation: "case 1 没有 break，会继续执行到 case 2，输出 AB，然后 break。"
     },
     {
-      id: 1103, type: "choice", category: "switch", difficulty: 3, knowledgePoint: "default",
+      id: 1103, type: "choice", category: "switch", difficulty: 4, knowledgePoint: "default",
       question: `int n = 9;\nswitch (n) {\n  case 1: printf("A"); break;\n  case 2: printf("B"); break;\n  default: printf("C");\n}\n\n输出是？`,
       options: ["A", "B", "C", "无输出"],
       answer: 2,
       explanation: "没有匹配的 case，走 default，输出 C。"
     },
     {
-      id: 1104, type: "judge", category: "switch", difficulty: 3, knowledgePoint: "switch break",
+      id: 1104, type: "judge", category: "switch", difficulty: 4, knowledgePoint: "switch break",
       question: `switch 的每个 case 末尾写 break 是为了防止继续执行后面的 case（贯穿）。`,
       options: ["正确", "错误"],
       answer: 0,
@@ -139,14 +139,14 @@
 
     // ========== 循环 for / while / do-while ==========
     {
-      id: 1201, type: "choice", category: "loop", difficulty: 3, knowledgePoint: "for 基本",
+      id: 1201, type: "choice", category: "loop", difficulty: 4, knowledgePoint: "for 基本",
       question: `int s = 0;\nfor (int i = 1; i <= 3; i++)\n  s = s + i;\nprintf("%d", s);\n\n输出是？`,
       options: ["3", "6", "9", "0"],
       answer: 1,
       explanation: "i=1,2,3 累加，s=1+2+3=6。"
     },
     {
-      id: 1202, type: "choice", category: "loop", difficulty: 3, knowledgePoint: "while 基本",
+      id: 1202, type: "choice", category: "loop", difficulty: 4, knowledgePoint: "while 基本",
       question: `int n = 3;\nwhile (n > 0) {\n  printf("%d", n);\n  n--;\n}\n\n输出是？`,
       options: ["321", "123", "333", "012"],
       answer: 0,
@@ -160,7 +160,7 @@
       explanation: "do-while 至少执行一次，先输出 A，然后 n=1，条件 n<0 为假，结束。"
     },
     {
-      id: 1204, type: "judge", category: "loop", difficulty: 3, knowledgePoint: "while vs do-while",
+      id: 1204, type: "judge", category: "loop", difficulty: 4, knowledgePoint: "while vs do-while",
       question: `while 循环可能一次都不执行；do-while 至少执行一次。`,
       options: ["正确", "错误"],
       answer: 0,
@@ -216,7 +216,7 @@
       explanation: "x: 1→2→4→8→16，当 x=16 时 16<10 为假，退出，输出 16。"
     },
     {
-      id: 1212, type: "judge", category: "loop", difficulty: 3, knowledgePoint: "for 三要素",
+      id: 1212, type: "judge", category: "loop", difficulty: 4, knowledgePoint: "for 三要素",
       question: `for (初始化; 条件; 步进) 中，条件为假时不会进入循环体。`,
       options: ["正确", "错误"],
       answer: 0,
@@ -251,7 +251,7 @@
       explanation: "== 是比较，= 是赋值，含义不同。"
     },
     {
-      id: 1302, type: "judge", category: "switch", difficulty: 3, knowledgePoint: "switch 用途",
+      id: 1302, type: "judge", category: "switch", difficulty: 4, knowledgePoint: "switch 用途",
       question: `switch 只能用于判断整数，不能用于字符 char。`,
       options: ["正确", "错误"],
       answer: 1,
@@ -286,14 +286,14 @@
       explanation: "无匹配 case 且无 default，switch 什么都不做，然后输出 OK。"
     },
     {
-      id: 1307, type: "choice", category: "branch", difficulty: 3, knowledgePoint: "三目运算",
+      id: 1307, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "三目运算",
       question: `int a = 3, b = 5;\nint m = (a > b) ? a : b;\nprintf("%d", m);\n\n输出是？`,
       options: ["3", "5", "1", "0"],
       answer: 1,
       explanation: "三目运算取较大者，输出 5。"
     },
     {
-      id: 1308, type: "judge", category: "branch", difficulty: 3, knowledgePoint: "else 可选",
+      id: 1308, type: "judge", category: "branch", difficulty: 4, knowledgePoint: "else 可选",
       question: `写 if 时可以没有 else。`,
       options: ["正确", "错误"],
       answer: 0,
@@ -317,10 +317,217 @@
       options: ["work", "rest", "workrest", "无输出"],
       answer: 0,
       explanation: "case 1/2/3 共用同一段，d=3 输出 work。"
+    },
+    // ===== 复合难题扩充 =====
+    {
+      id: 1401, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "嵌套循环计数",
+      question: `int c = 0;\nfor (int i = 1; i <= 3; i++)\n  for (int j = 1; j <= i; j++)\n    c++;\nprintf("%d", c);\n\n输出是？`,
+      options: ["3", "6", "9", "4"],
+      answer: 1,
+      explanation: "内层次数：1+2+3=6。"
+    },
+    {
+      id: 1402, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "break 嵌套",
+      question: `int s = 0;\nfor (int i = 1; i <= 5; i++) {\n  for (int j = 1; j <= 5; j++) {\n    if (j == 3) break;\n    s++;\n  }\n}\nprintf("%d", s);\n\n输出是？`,
+      options: ["25", "15", "10", "5"],
+      answer: 2,
+      explanation: "内层 j=1,2 计两次后 break，每轮外层 +2，共 5×2=10。"
+    },
+    {
+      id: 1403, type: "choice", category: "branch", difficulty: 5, knowledgePoint: "多条件综合",
+      question: `int x = 8;\nif (x > 10)\n  printf("A");\nelse if (x > 5 && x % 2 == 0)\n  printf("B");\nelse if (x > 5)\n  printf("C");\nelse\n  printf("D");\n\n输出是？`,
+      options: ["A", "B", "C", "D"],
+      answer: 1,
+      explanation: "x>10 假；x>5 且偶数成立，输出 B。"
+    },
+    {
+      id: 1404, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "switch 表达式",
+      question: `int a = 1, b = 2;\nswitch (a + b) {\n  case 2: printf("X"); break;\n  case 3: printf("Y"); break;\n  case 4: printf("Z"); break;\n  default: printf("W");\n}\n\n输出是？`,
+      options: ["X", "Y", "Z", "W"],
+      answer: 1,
+      explanation: "a+b=3，匹配 case 3，输出 Y。"
+    },
+    {
+      id: 1405, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "while 累乘",
+      question: `int n = 1, p = 1;\nwhile (n < 5) {\n  p *= n;\n  n++;\n}\nprintf("%d", p);\n\n输出是？`,
+      options: ["24", "120", "12", "6"],
+      answer: 0,
+      explanation: "n=1..4 累乘 p=1*1*2*3*4=24，然后 n=5 退出。"
+    },
+    {
+      id: 1406, type: "judge", category: "loop", difficulty: 4, knowledgePoint: "continue 后步进",
+      question: `for 循环中执行 continue 后，仍会执行步进表达式（如 i++）。`,
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "continue 会跳到本轮结尾，for 的步进仍会执行。"
+    },
+    {
+      id: 1407, type: "choice", category: "branch", difficulty: 5, knowledgePoint: "三目嵌套",
+      question: `int a = 2, b = 5, c = 3;\nint m = (a > b) ? a : ((c > b) ? c : b);\nprintf("%d", m);\n\n输出是？`,
+      options: ["2", "5", "3", "0"],
+      answer: 1,
+      explanation: "a>b 假，再比 c>b 假，取 b=5。"
+    },
+    {
+      id: 1408, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "do-while 复合",
+      question: `int i = 0, s = 0;\ndo {\n  i++;\n  if (i % 2 == 0) continue;\n  s += i;\n} while (i < 5);\nprintf("%d", s);\n\n输出是？`,
+      options: ["9", "15", "6", "12"],
+      answer: 0,
+      explanation: "奇数 1+3+5=9，偶数被 continue 跳过。"
+    },
+    {
+      id: 1409, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "字符贯穿",
+      question: `char ch = 'a';\nswitch (ch) {\n  case 'a': printf("1");\n  case 'b': printf("2"); break;\n  case 'c': printf("3"); break;\n}\n\n输出是？`,
+      options: ["1", "12", "123", "2"],
+      answer: 1,
+      explanation: "case 'a' 无 break，落到 'b' 输出 12。"
+    },
+    {
+      id: 1410, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "循环边界",
+      question: `int c = 0;\nfor (int i = 0; i <= 10; i += 2)\n  c++;\nprintf("%d", c);\n\n输出是？`,
+      options: ["5", "6", "10", "11"],
+      answer: 1,
+      explanation: "i=0,2,4,6,8,10 共 6 次。"
+    },
+    {
+      id: 1411, type: "judge", category: "branch", difficulty: 5, knowledgePoint: "else 就近",
+      question: `没有花括号时，else 总是与距离最近的尚未匹配的 if 配对。`,
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "这是 C++ 的 else 就近匹配规则。"
+    },
+    {
+      id: 1412, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "双重条件",
+      question: `int x = 0;\nfor (int i = 1; i <= 10; i++) {\n  if (i % 3 == 0) x += i;\n}\nprintf("%d", x);\n\n输出是？`,
+      options: ["18", "30", "15", "55"],
+      answer: 0,
+      explanation: "3+6+9=18（12 已超过 10）。"
     }
+    ,
+    { id: 1501, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "if 赋值笔误",
+      question: `int x = 0;\nif (x = 1)\n  printf("A");\nelse\n  printf("B");\n\n输出是？`,
+      options: ["A", "B", "编译错误", "无输出"],
+      answer: 0,
+      explanation: "x=1 是赋值，表达式值为 1（真），输出 A。易与 == 混淆。"
+    },
+    { id: 1502, type: "choice", category: "branch", difficulty: 5, knowledgePoint: "短路求值",
+      question: `int a = 0, b = 5;\nif (a && (b = 10))\n  ;\nprintf("%d", b);\n\n输出是？`,
+      options: ["5", "10", "0", "编译错误"],
+      answer: 0,
+      explanation: "a 为 0，&& 短路，(b=10) 不执行，b 仍为 5。"
+    },
+    { id: 1503, type: "choice", category: "switch", difficulty: 4, knowledgePoint: "switch 贯穿",
+      question: `int n = 1;\nswitch (n) {\n  case 1: printf("A");\n  case 2: printf("B"); break;\n  default: printf("C");\n}\n\n输出是？`,
+      options: ["A", "B", "AB", "ABC"],
+      answer: 2,
+      explanation: "case 1 无 break，贯穿到 case 2，输出 AB。"
+    },
+    { id: 1504, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "switch 字符",
+      question: `char c = 'b';\nswitch (c) {\n  case 'a': printf("1"); break;\n  case 'b': printf("2"); break;\n  default: printf("3");\n}\n\n输出是？`,
+      options: ["1", "2", "3", "23"],
+      answer: 1,
+      explanation: "匹配 case 'b'，输出 2。"
+    },
+    { id: 1505, type: "choice", category: "loop", difficulty: 4, knowledgePoint: "for 求和",
+      question: `int s = 0;\nfor (int i = 0; i < 5; i++) s += i;\nprintf("%d", s);\n\n输出是？`,
+      options: ["10", "15", "5", "0"],
+      answer: 0,
+      explanation: "0+1+2+3+4=10。"
+    },
+    { id: 1506, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "空循环体",
+      question: `int i;\nfor (i = 0; i < 3; i++);\nprintf("%d", i);\n\n输出是？`,
+      options: ["0", "2", "3", "编译错误"],
+      answer: 2,
+      explanation: "for 后分号使循环体为空；结束时 i 为 3。"
+    },
+    { id: 1507, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "while break",
+      question: `int n = 0;\nwhile (1) {\n  n++;\n  if (n == 3) break;\n}\nprintf("%d", n);\n\n输出是？`,
+      options: ["1", "2", "3", "死循环"],
+      answer: 2,
+      explanation: "n 到 3 时 break。"
+    },
+    { id: 1508, type: "judge", category: "loop", difficulty: 4, knowledgePoint: "do-while",
+      question: `do-while 循环至少会执行一次循环体。`,
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "先执行再判断。"
+    },
+    { id: 1509, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "嵌套循环计数",
+      question: `int c = 0;\nfor (int i = 0; i < 3; i++)\n  for (int j = 0; j < 2; j++)\n    c++;\nprintf("%d", c);\n\n输出是？`,
+      options: ["3", "5", "6", "2"],
+      answer: 2,
+      explanation: "3×2=6。"
+    },
+    { id: 1510, type: "choice", category: "branch", difficulty: 4, knowledgePoint: "三元运算符",
+      question: `int a = 3, b = 5;\nprintf("%d", a > b ? a : b);\n\n输出是？`,
+      options: ["3", "5", "1", "0"],
+      answer: 1,
+      explanation: "取较大值 b=5。"
+    }
+    ,
+    { id: 1601, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "for 空语句",
+      question: `int s = 0;\nfor (int i = 1; i <= 5; i++);\n  s += i;\nprintf("%d", s);\n\n更可能的输出是？`,
+      options: ["15", "6", "5", "0"],
+      answer: 1,
+      explanation: "for 后分号使循环体为空；结束后 i 为 6，s+=i 一次，s=6。"
+    },
+    { id: 1602, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "嵌套 continue",
+      question: `int c = 0;\nfor (int i = 0; i < 3; i++) {\n  for (int j = 0; j < 3; j++) {\n    if (j == 1) continue;\n    c++;\n  }\n}\nprintf("%d", c);\n\n输出是？`,
+      options: ["9", "6", "3", "4"],
+      answer: 1,
+      explanation: "内层 j==1 跳过，共 6 次。"
+    },
+    { id: 1603, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "while 赋值条件",
+      question: `int n = 3, s = 0;\nwhile (n = n - 1) {\n  s += n;\n}\nprintf("%d", s);\n\n输出是？`,
+      options: ["6", "3", "2", "死循环"],
+      answer: 1,
+      explanation: "n 变为 2、1、0；循环两次 s=2+1=3。"
+    },
+    { id: 1604, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "内层 break",
+      question: `int k = 0;\nfor (int i = 0; i < 3; i++) {\n  for (int j = 0; j < 3; j++) {\n    if (i == 1 && j == 1) break;\n    k++;\n  }\n}\nprintf("%d", k);\n\n输出是？`,
+      options: ["9", "8", "7", "6"],
+      answer: 2,
+      explanation: "break 只结束内层。i0:3 次；i1:j0 一次后 j1 break；i2:3 次。共 7。"
+    },
+    { id: 1605, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "do-while 条件",
+      question: `int n = 0;\ndo {\n  n++;\n} while (n < 1);\nprintf("%d", n);\n\n输出是？`,
+      options: ["0", "1", "2", "死循环"],
+      answer: 1,
+      explanation: "至少执行一次：n 变为 1，条件 1<1 假，结束，输出 1。"
+    },
+    { id: 1606, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "for 变量作用域输出",
+      question: `int i = 10;\nfor (int i = 0; i < 3; i++) {}\nprintf("%d", i);\n\n在常见编译器下外层 i 输出？`,
+      options: ["0", "3", "10", "未定义一定崩溃"],
+      answer: 2,
+      explanation: "for 内 int i 为块作用域，循环结束后外层 i 仍为 10。"
+    },
+    { id: 1607, type: "judge", category: "loop", difficulty: 5, knowledgePoint: "continue 跳过",
+      question: `for 循环中执行 continue 会立刻结束整个 for 循环。`,
+      options: ["正确", "错误"],
+      answer: 1,
+      explanation: "continue 结束本轮，进入下一轮；break 才结束整个循环。"
+    },
+    { id: 1608, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "累加隐藏",
+      question: `int s = 0;\nfor (int i = 1; i <= 10; i++)\n  if (i % 2 == 0) s += i;\nprintf("%d", s);\n\n输出是？`,
+      options: ["25", "30", "55", "20"],
+      answer: 1,
+      explanation: "2+4+6+8+10=30。"
+    },
+    { id: 1609, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "switch 贯穿求和",
+      question: `int n = 2, s = 0;\nswitch (n) {\n  case 1: s += 1;\n  case 2: s += 2;\n  case 3: s += 3; break;\n  default: s = 0;\n}\nprintf("%d", s);\n\n输出是？`,
+      options: ["2", "5", "6", "0"],
+      answer: 1,
+      explanation: "从 case 2 贯穿到 case 3：s=2+3=5。"
+    },
+    { id: 1610, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "双重循环输出次数",
+      question: `int t = 0;\nfor (int i = 1; i <= 4; i++)\n  for (int j = 1; j <= i; j++)\n    t++;\nprintf("%d", t);\n\n输出是？`,
+      options: ["4", "8", "10", "16"],
+      answer: 2,
+      explanation: "1+2+3+4=10 次。"
+    }
+
   ];
 
-  // 修正 1009 答案为无输出
   const q1009 = STATIC_CONTROL_FLOW.find(q => q.id === 1009);
   if (q1009) {
     q1009.answer = 2;

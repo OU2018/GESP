@@ -173,6 +173,112 @@
       answer: 1,
       explanation: "计算机应用非常广泛。"
     }
+    ,{
+      id: 2025, type: "choice", category: "storage", difficulty: 5, knowledgePoint: "单位换算综合",
+      question: "2 MB 等于多少 KB？",
+      options: ["2000", "2048", "1024", "512"],
+      answer: 1,
+      explanation: "2×1024=2048 KB。"
+    },
+    {
+      id: 2026, type: "choice", category: "process", difficulty: 5, knowledgePoint: "编译链接",
+      question: "把多个目标文件和库合并成可执行文件的过程通常称为？",
+      options: ["预处理", "编译", "链接", "调试"],
+      answer: 2,
+      explanation: "链接（linking）生成最终可执行文件。"
+    },
+    {
+      id: 2027, type: "judge", category: "hardware", difficulty: 4, knowledgePoint: "外存",
+      question: "硬盘属于外存储器，断电后数据一般不会立刻消失。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "外存非易失，可长期保存。"
+    },
+    {
+      id: 2028, type: "choice", category: "process", difficulty: 4, knowledgePoint: "错误类型",
+      question: "少写分号导致无法通过编译，这类错误属于？",
+      options: ["逻辑错误", "语法错误", "运行时错误", "网络错误"],
+      answer: 1,
+      explanation: "语法不符合语言规则，属于语法错误。"
+    },
+    {
+      id: 2029, type: "choice", category: "os", difficulty: 4, knowledgePoint: "软件分类",
+      question: "Dev-C++、VS Code 主要属于？",
+      options: ["系统软件中的操作系统", "应用软件/开发工具", "CPU 硬件", "只能是杀毒软件"],
+      answer: 1,
+      explanation: "IDE 属于开发类应用软件（广义工具软件）。"
+    },
+    {
+      id: 2030, type: "judge", category: "storage", difficulty: 5, knowledgePoint: "bit",
+      question: "1 KB = 1024 bit。",
+      options: ["正确", "错误"],
+      answer: 1,
+      explanation: "1 KB = 1024 Byte，1 Byte = 8 bit，所以 1 KB = 1024×8 bit。"
+    }
+
+  
+    ,
+    { id: 2101, type: "choice", category: "hardware", difficulty: 4, knowledgePoint: "CPU",
+      question: "计算机的运算和控制核心通常是？",
+      options: ["硬盘", "CPU", "显示器", "音箱"],
+      answer: 1,
+      explanation: "CPU 负责运算与控制。"
+    },
+    { id: 2102, type: "choice", category: "storage", difficulty: 4, knowledgePoint: "Byte",
+      question: "1 Byte 等于多少 bit？",
+      options: ["1", "4", "8", "16"],
+      answer: 2,
+      explanation: "1 字节 = 8 位。"
+    },
+    { id: 2103, type: "choice", category: "storage", difficulty: 5, knowledgePoint: "换算",
+      question: "2 KB 等于多少 Byte？（按 1024 进制）",
+      options: ["2000", "2048", "1024", "512"],
+      answer: 1,
+      explanation: "2×1024=2048。"
+    },
+    { id: 2104, type: "choice", category: "process", difficulty: 4, knowledgePoint: "编译",
+      question: "把高级语言源程序翻译成目标程序的过程称为？",
+      options: ["编辑", "编译", "链接仅指下载", "双击运行"],
+      answer: 1,
+      explanation: "编译是翻译过程。"
+    },
+    { id: 2105, type: "choice", category: "process", difficulty: 5, knowledgePoint: "可执行",
+      question: "下列哪一步通常发生在“编译成功之后”？",
+      options: ["写源代码", "链接生成可执行文件", "只能用记事本保存", "必须先上网"],
+      answer: 1,
+      explanation: "编译后常经链接得到可执行文件。"
+    },
+    { id: 2106, type: "judge", category: "os", difficulty: 4, knowledgePoint: "操作系统",
+      question: "Windows、Linux 都属于操作系统。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "它们都是常见操作系统。"
+    },
+    { id: 2107, type: "choice", category: "hardware", difficulty: 5, knowledgePoint: "内存",
+      question: "程序运行时主要使用的、断电后数据消失的存储器是？",
+      options: ["ROM 只读光盘", "内存 RAM", "机械硬盘", "U 盘"],
+      answer: 1,
+      explanation: "内存（RAM）掉电丢失，运行时主要使用它。"
+    },
+    { id: 2108, type: "choice", category: "process", difficulty: 4, knowledgePoint: "源文件",
+      question: "C++ 源程序文件常见扩展名是？",
+      options: [".exe", ".cpp", ".jpg", ".mp3"],
+      answer: 1,
+      explanation: ".cpp 是常见 C++ 源文件扩展名。"
+    },
+    { id: 2109, type: "choice", category: "storage", difficulty: 5, knowledgePoint: "容量比较",
+      question: "下列容量从大到小正确的是？",
+      options: ["B > KB > MB", "MB > KB > B", "KB > MB > GB", "bit > Byte > KB"],
+      answer: 1,
+      explanation: "MB > KB > B（Byte）。"
+    },
+    { id: 2110, type: "judge", category: "process", difficulty: 4, knowledgePoint: "语法错误",
+      question: "缺少分号导致编译失败，属于语法错误。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "不符合语法规则，属于语法错误。"
+    }
+
   ];
 
   window.GESP_BANKS = window.GESP_BANKS || {};

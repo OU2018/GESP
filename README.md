@@ -48,3 +48,31 @@ git push -u origin main
 ## 配置姓名
 
 编辑 `config.js` 中的 `userName`，或在网页「设置」里填写。
+
+
+## 学员链接后缀（自动识别姓名）
+
+在 `config.js` 的 `studentMap` 中配置：
+
+```js
+studentMap: {
+  cxj: "蔡小婧",
+  xm: "小明"
+}
+```
+
+部署到 GitHub Pages 后，学员访问：
+
+```text
+https://你的用户名.github.io/仓库名/cxj
+```
+
+页面会识别 `cxj` → 蔡小婧，写入本地后跳转到：
+
+```text
+https://你的用户名.github.io/仓库名/
+```
+
+首页显示「你好，蔡小婧」。原理：GitHub Pages 对不存在的路径返回自定义 `404.html` 完成解析与跳转。
+
+也可使用查询参数：`https://…/index.html?u=cxj`

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>正在进入训练…</title>
+  <script src="config.js"></script>
+  <style>
+    body {
+      margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      font-family: system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #0f172a; color: #e2e8f0;
+    }
+    .box { text-align: center; padding: 24px; }
+    .name { color: #93c5fd; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="box" id="msg">正在识别学员并进入训练…</div>
+  <script>
+(function () {
+  var cfg = window.GESP_CONFIG || {};
+  var map = cfg.studentMap || {};
+
+  // 解析路径：/GESP/cxj 或 /GESP/cxj/ → 后缀 cxj
+  var parts = location.pathname.replace(/\/+$/, "").split("/").filter(Boolean);
+  var code = parts.length ? parts[parts.length - 1] : "";
+  // 忽略真实文件名
+  if (!code || /\.(html?|js|css|json|md|png|jpg|svg|ico)$/i.test(code)) {
+    code = "";
+  }
+
+  // 站点根路径（去掉最后一段后缀）
+  var baseParts = code ? parts.slice(0, -1) : parts;
+  var base = "/" + baseParts.join("/");
+  if (!base.endsWith("/")) base += "/";
+  // 项目页在仓库根时 base 可能是 "/" 
+  var home = base + "index.html";
+
+  var displayName = "";
+  if (code) {
+    var key = code.toLowerCase();
+    if (map[code] != null) displayName = map[code];
+    else if (map[key] != null) displayName = map[key];
+    else displayName = decodeURIComponent(code); // 未配置则用后缀本身
+  }
+
+  try {
+    if (code) {
+      localStorage.setItem("gesp_entry_code", code);
+      localStorage.setItem("gesp_entry_name", displayName);
+      localStorage.setItem("gesp_entry_at", new Date().toISOString());
+    }
+  } catch (e) {}
+
+  var el = document.getElementById("msg");
+  if (displayName) {
+    el.innerHTML = "欢迎，<span class=\"name\">" + displayName + "</span>！正在进入…";
+  }
+
+  // 跳转首页（带查询参数，首页也能立刻读到）
+  var q = code ? ("?u=" + encodeURIComponent(code)) : "";
+  setTimeout(function () {
+    location.replace(home + q);
+  }, displayName ? 400 : 100);
+})();
+  </script>
+</body>
+</html>
