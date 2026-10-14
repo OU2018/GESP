@@ -431,6 +431,128 @@ body {
   min-width: 24px;
 }
 
+/* 选项右侧的数字快捷键角标 */
+.option .kbd-badge {
+  margin-left: auto;
+  min-width: 28px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(148, 163, 184, 0.10);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.option:hover:not(.disabled) .kbd-badge {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.options.answered .kbd-badge {
+  display: none;
+}
+
+/* 「下一题」按钮上的 Enter 提示（选择题选项 & 填空提交按钮通用） */
+.next-btn::after {
+  content: "Enter ↵";
+  margin-left: 12px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+/* 键帽通用样式（新手教学弹窗用） */
+.kbd {
+  display: inline-block;
+  min-width: 34px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-bottom-width: 3px;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: inherit;
+}
+
+.kbd.kbd-wide {
+  padding: 6px 16px;
+}
+
+/* 键盘速答新手教学弹窗 */
+.kb-tutorial-card {
+  text-align: center;
+}
+
+.kb-tutorial-emoji {
+  font-size: 2.6rem;
+  margin-bottom: 6px;
+}
+
+.kb-tutorial-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.kb-tutorial-sub {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0 0 18px;
+}
+
+.kb-tutorial-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  background: rgba(30, 41, 59, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.kb-tutorial-row .kb-tutorial-text {
+  margin-left: 8px;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.kb-tutorial-tip {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 4px 0 16px;
+}
+
+.kb-tutorial-btn {
+  width: 100%;
+  font-size: 1rem;
+  padding: 12px;
+}
+
+.kb-tutorial-hint {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
 .explain-area {
   background: var(--card);
   border-radius: 12px;

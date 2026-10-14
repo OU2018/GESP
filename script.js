@@ -1571,6 +1571,7 @@ function showView(id) {
   } catch (e) {}
   if (el) {
     el.classList.add("active");
+    if (id === "quiz-view") maybeShowKbTutorial();
     return true;
   }
   try { uiToast("页面不存在：" + id + "（请强制刷新加载新版本）", "error"); } catch (e) {}
@@ -2638,12 +2639,13 @@ function renderQuestion() {
   } else {
     optsEl.style.display = "flex";
     fillEl.style.display = "none";
+    optsEl.classList.remove("answered");
     q.options.forEach((text, i) => {
       const div = document.createElement("div");
       div.className = "option";
       div.dataset.idx = i;
       const label = String.fromCharCode(65 + i);
-      div.innerHTML = `<span class="mark">${label}.</span> <span>${formatOptionDisplay(text)}</span>`;
+      div.innerHTML = `<span class="mark">${label}.</span> <span class="opt-text">${formatOptionDisplay(text)}</span><kbd class="kbd-badge">${i + 1}</kbd>`;
       div.onclick = () => selectAnswer(i);
       optsEl.appendChild(div);
     });
@@ -2682,9 +2684,15 @@ function renderQuestion() {
     }
   } catch (e) {}
 
-  if (quiz.isRace) {
-    // 竞速使用整场倒计时，不用单题限时
-  } else if (data.settings.timePerQ > 0) {
+  // 键盘教学弹窗打开时暂不启动计时，关闭教学（closeKbTutorial）后再启动
+  if (!document.getElementById("kb-tutorial-modal")) startQuestionTimer();
+}
+
+/** 启动（或重启）单题限时倒计时；不限时则显示「不限时」 */
+function startQuestionTimer() {
+  clearInterval(quiz.timer);
+  if (quiz.isRace) return;
+  if (data.settings.timePerQ > 0) {
     quiz.timeLeft = data.settings.timePerQ;
     updateTimerDisplay();
     quiz.timer = setInterval(() => {
@@ -2743,6 +2751,7 @@ function selectAnswer(idx) {
   if (quiz.answered) return;
   quiz.answered = true;
   clearInterval(quiz.timer);
+  document.getElementById("options").classList.add("answered");
 
   const q = quiz.list[quiz.index];
   const opts = document.querySelectorAll(".option");
@@ -2752,14 +2761,14 @@ function selectAnswer(idx) {
 
   if (isCorrect) {
     opts[idx].classList.add("correct");
-    opts[idx].innerHTML = `<span class="mark">✓</span> <span>${opts[idx].querySelector("span:last-child").textContent}</span>`;
+    opts[idx].innerHTML = `<span class="mark">✓</span> <span>${opts[idx].querySelector(".opt-text").textContent}</span>`;
     handleCorrect(q, opts[idx]);
   } else {
     // 错误选项标记 ❌，正确答案高亮 ✓
     opts[idx].classList.add("wrong");
-    opts[idx].innerHTML = `<span class="mark">❌</span> <span>${opts[idx].querySelector("span:last-child").textContent}</span>`;
+    opts[idx].innerHTML = `<span class="mark">❌</span> <span>${opts[idx].querySelector(".opt-text").textContent}</span>`;
     opts[q.answer].classList.add("correct");
-    opts[q.answer].innerHTML = `<span class="mark">✓</span> <span>${opts[q.answer].querySelector("span:last-child").textContent}</span>`;
+    opts[q.answer].innerHTML = `<span class="mark">✓</span> <span>${opts[q.answer].querySelector(".opt-text").textContent}</span>`;
     // 关键：错误选项本身变成「下一题」按钮
     handleWrong(q, q.options[idx], opts[idx]);
   }
@@ -2887,9 +2896,10 @@ function handleCorrect(q, nextBtnEl) {
     }
   }, 400);
 
+  const okIdx = quiz.index;
   if (data.settings.autoNext > 0) {
     setTimeout(() => {
-      if (quiz.answered) nextQuestion();
+      if (quiz.index === okIdx && quiz.answered) nextQuestion();
     }, data.settings.autoNext * 1000);
   }
 }
@@ -2961,9 +2971,10 @@ function handleTimeout() {
     }, 300);
   } else {
     const opts = document.querySelectorAll(".option");
+    document.getElementById("options").classList.add("answered");
     opts.forEach(o => o.classList.add("disabled"));
     opts[q.answer].classList.add("correct");
-    opts[q.answer].innerHTML = `<span class="mark">✓</span> <span>${opts[q.answer].querySelector("span:last-child").textContent}</span>`;
+    opts[q.answer].innerHTML = `<span class="mark">✓</span> <span>${opts[q.answer].querySelector(".opt-text").textContent}</span>`;
     addToWrongBook(q, "(超时未答)", true);
     showExplain(false, q, "(超时未答)", true);
     setTimeout(() => {
@@ -2974,8 +2985,9 @@ function handleTimeout() {
     }, 300);
   }
 
+  const timeoutIdx = quiz.index;
   if (data.settings.autoNext > 0) {
-    setTimeout(() => nextQuestion(), Math.max(data.settings.autoNext, 2) * 1000);
+    setTimeout(() => { if (quiz.index === timeoutIdx) nextQuestion(); }, Math.max(data.settings.autoNext, 2) * 1000);
   }
 }
 
@@ -3017,6 +3029,122 @@ function nextQuestion() {
   }
   quiz.index++;
   renderQuestion();
+}
+
+
+/* ========== 键盘速答模式 ========== */
+const KB_TUTORIAL_KEY = "gesp_kb_tutorial_shown";
+let kbTutorialShownInMem = false;
+
+function isQuizViewActive() {
+  const v = document.getElementById("quiz-view");
+  return !!(v && v.classList.contains("active"));
+}
+
+/** 按 Enter 进入下一题；若「下一题」按钮还在过渡动画中（300~400ms），短暂等待后重试 */
+function tryEnterNext() {
+  if (!quiz.answered || !isQuizViewActive()) return;
+  const nextBtn = document.querySelector("#options .option.next-btn, #fill-area .next-btn");
+  if (nextBtn) {
+    nextQuestion();
+    return;
+  }
+  if (quiz.enterRetry) return;
+  quiz.enterRetry = setTimeout(() => {
+    quiz.enterRetry = null;
+    tryEnterNext();
+  }, 100);
+}
+
+function initKeyboardShortcuts() {
+  document.addEventListener("keydown", (e) => {
+    // 教学弹窗打开时：Enter / 数字键 / Esc 均可关闭
+    const tut = document.getElementById("kb-tutorial-modal");
+    if (tut) {
+      if (e.key === "Enter" || e.key === "Escape" || /^[1-4]$/.test(e.key)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        closeKbTutorial();
+      }
+      return;
+    }
+    // 其他模态框打开时不抢按键
+    if (document.querySelector(".modal-mask")) return;
+    if (!isQuizViewActive()) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    const tag = (e.target && e.target.tagName) || "";
+    const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+    const q = quiz.list[quiz.index];
+
+    // Enter → 下一题（未作答时不拦，填空输入框有自己的 Enter 提交）
+    if (e.key === "Enter") {
+      if (!quiz.answered) return;
+      e.preventDefault();
+      tryEnterNext();
+      return;
+    }
+
+    // 输入中不响应数字快捷键
+    if (typing) return;
+
+    // 数字 1~4 → 快速选择 A/B/C/D
+    if (/^[1-4]$/.test(e.key) && q && q.type !== "fill" && !quiz.answered) {
+      const opts = document.querySelectorAll("#options .option");
+      const idx = parseInt(e.key, 10) - 1;
+      if (opts[idx]) {
+        e.preventDefault();
+        selectAnswer(idx);
+      }
+    }
+  });
+}
+
+/** 首次进入答题界面时展示键盘快捷键教学（仅一次） */
+function maybeShowKbTutorial() {
+  if (kbTutorialShownInMem) return;
+  let stored = false;
+  try { stored = localStorage.getItem(KB_TUTORIAL_KEY) === "1"; } catch (e) {}
+  if (stored) { kbTutorialShownInMem = true; return; }
+  kbTutorialShownInMem = true;
+  try { localStorage.setItem(KB_TUTORIAL_KEY, "1"); } catch (e) {}
+
+  const modal = document.createElement("div");
+  modal.id = "kb-tutorial-modal";
+  modal.className = "modal-mask";
+  modal.innerHTML = `
+    <div class="modal-card kb-tutorial-card">
+      <div class="kb-tutorial-emoji">⌨️</div>
+      <div class="kb-tutorial-title">键盘速答模式已开启</div>
+      <p class="kb-tutorial-sub">答题时无需鼠标，全程键盘操作更快！</p>
+      <div class="kb-tutorial-row">
+        <span class="kbd">1</span><span class="kbd">2</span><span class="kbd">3</span><span class="kbd">4</span>
+        <span class="kb-tutorial-text">快速选择 A / B / C / D 选项</span>
+      </div>
+      <div class="kb-tutorial-row">
+        <span class="kbd kbd-wide">Enter ↵</span>
+        <span class="kb-tutorial-text">进入下一题（填空题时为提交答案）</span>
+      </div>
+      <div class="kb-tutorial-tip">每个选项右侧的数字角标就是对应的按键</div>
+      <button class="btn-primary kb-tutorial-btn" id="btn-kb-tutorial-ok">知道了，开始答题！</button>
+      <div class="kb-tutorial-hint">此提示仅首次答题时显示</div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector("#btn-kb-tutorial-ok").onclick = () => closeKbTutorial();
+
+  // 教学期间暂停单题倒计时，关闭后重新计时
+  clearInterval(quiz.timer);
+}
+
+function closeKbTutorial() {
+  const modal = document.getElementById("kb-tutorial-modal");
+  if (!modal) return;
+  modal.remove();
+  if (isQuizViewActive() && !quiz.answered) {
+    quiz.qStartTime = Date.now();
+    startQuestionTimer();
+  }
 }
 
 
@@ -3997,6 +4125,7 @@ function initDebugMenu() {
 }
 
 
+initKeyboardShortcuts();
 initDebugMenu();
 initDailyCheckinPanel();
 applyEntryNameFromUrl();
