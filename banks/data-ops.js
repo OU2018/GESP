@@ -6,70 +6,70 @@
 (function () {
   const Q = [
     {
-      id: 2101, type: "choice", category: "type", difficulty: 3, knowledgePoint: "数据类型",
+      id: 2131, type: "choice", category: "type", difficulty: 3, knowledgePoint: "数据类型",
       question: "要存储整数 100，最常用的类型是？",
       options: ["int", "float", "bool", "仅能用 char"],
       answer: 0,
       explanation: "整数常用 int。"
     },
     {
-      id: 2102, type: "choice", category: "type", difficulty: 3, knowledgePoint: "数据类型",
+      id: 2132, type: "choice", category: "type", difficulty: 3, knowledgePoint: "数据类型",
       question: "要存储小数 3.14，更合适的是？",
       options: ["int", "char", "float 或 double", "bool"],
       answer: 2,
       explanation: "小数用浮点型 float / double。"
     },
     {
-      id: 2103, type: "choice", category: "type", difficulty: 3, knowledgePoint: "字符类型",
+      id: 2133, type: "choice", category: "type", difficulty: 3, knowledgePoint: "字符类型",
       question: "char 类型通常用来存储？",
       options: ["一个字符", "一串很长的文章", "仅布尔值", "仅小数"],
       answer: 0,
       explanation: "char 存储单个字符。"
     },
     {
-      id: 2104, type: "judge", category: "type", difficulty: 3, knowledgePoint: "bool",
+      id: 2134, type: "judge", category: "type", difficulty: 3, knowledgePoint: "bool",
       question: "bool 类型的值通常只有 true 和 false 两种（逻辑真/假）。",
       options: ["正确", "错误"],
       answer: 0,
       explanation: "布尔型表示真假。"
     },
     {
-      id: 2105, type: "choice", category: "ident", difficulty: 3, knowledgePoint: "标识符",
+      id: 2135, type: "choice", category: "ident", difficulty: 3, knowledgePoint: "标识符",
       question: "下列可以作为变量名的是？",
       options: ["2num", "int", "student_age", "my-age"],
       answer: 2,
       explanation: "不能以数字开头；不能是关键字 int；不能含减号。student_age 合法。"
     },
     {
-      id: 2106, type: "judge", category: "ident", difficulty: 3, knowledgePoint: "关键字",
+      id: 2136, type: "judge", category: "ident", difficulty: 3, knowledgePoint: "关键字",
       question: "int、if、for 都是 C++ 的关键字，一般不能当作变量名。",
       options: ["正确", "错误"],
       answer: 0,
       explanation: "关键字有特殊含义，不能作标识符。"
     },
     {
-      id: 2107, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "整除",
+      id: 2137, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "整除",
       question: "在 C++ 中，int a = 7, b = 2; 则 a / b 的结果是？",
       options: ["3.5", "3", "4", "2"],
       answer: 1,
       explanation: "两个 int 相除为整除，7/2=3。"
     },
     {
-      id: 2108, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "取余",
+      id: 2138, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "取余",
       question: "int x = 17; 则 x % 5 的结果是？",
       options: ["3", "2", "5", "0"],
       answer: 0,
       explanation: "17 = 3×5 + 2？不对，17=3*5+2，应是 2。等等 3*5=15，余 2。修正答案为 2。"
     },
     {
-      id: 2109, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "算术运算",
+      id: 2139, type: "choice", category: "arith", difficulty: 3, knowledgePoint: "算术运算",
       question: "int a = 2, b = 3; 则 a * b + 1 的结果是？",
       options: ["7", "8", "6", "5"],
       answer: 0,
       explanation: "先乘后加：2*3+1=7。"
     },
     {
-      id: 2110, type: "choice", category: "inc", difficulty: 4, knowledgePoint: "自增",
+      id: 2140, type: "choice", category: "inc", difficulty: 4, knowledgePoint: "自增",
       question: "int n = 5; n++; 之后 n 的值是？",
       options: ["5", "6", "4", "0"],
       answer: 1,
@@ -284,10 +284,43 @@
       options: ["2", "1", "0", "4"],
       answer: 0,
       explanation: "100%7=2，2%3=2。"
-    }
-
-  
-    ,
+    },
+    { id: 2311, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "负数取余",
+      question: `int a = -7, b = 3;\nprintf("%d", a % b);\n\n输出是？`,
+      options: ["-1", "1", "2", "-2"],
+      answer: 0,
+      explanation: "C++ 中取余的符号与被除数相同：-7 = (-2)×3 + (-1)，所以 -7 % 3 = -1。"
+    },
+    { id: 2312, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "负数整除",
+      question: `printf("%d", -7 / 2);\n\n输出是？`,
+      options: ["-4", "-3", "-3.5", "编译错误"],
+      answer: 1,
+      explanation: "C++ 整数除法向零取整，-3.5 截断为 -3（不是向下取整的 -4）。"
+    },
+    { id: 2313, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "逗号表达式",
+      question: `int x;\nx = (3 + 2, 4 * 2, 10 - 1);\nprintf("%d", x);\n\n输出是？`,
+      options: ["5", "8", "9", "编译错误"],
+      answer: 2,
+      explanation: "逗号表达式从左到右依次求值，整体取最后一项：10-1=9。"
+    },
+    { id: 2314, type: "choice", category: "arith", difficulty: 5, knowledgePoint: "逗号表达式",
+      question: `int a = 1, b = 2;\nint c = (a = a + 3, b = b + a, a + b);\nprintf("%d", c);\n\n输出是？`,
+      options: ["10", "9", "6", "3"],
+      answer: 0,
+      explanation: "依次执行 a=4、b=2+4=6，最后一项 a+b=10，c 取 10。"
+    },
+    { id: 2315, type: "choice", category: "arith", difficulty: 4, knowledgePoint: "bool 算术",
+      question: `bool flag = true;\nint x = flag + 2;\nprintf("%d", x);\n\n输出是？`,
+      options: ["3", "2", "1", "编译错误"],
+      answer: 0,
+      explanation: "bool 参与算术时提升为 int，true 等价于 1，所以 x = 1+2 = 3。"
+    },
+    { id: 2316, type: "judge", category: "logic", difficulty: 4, knowledgePoint: "bool 算术",
+      question: "在 C++ 中，bool 型的 true 参与算术运算时等价于整数 1，false 等价于 0。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "bool 参与运算时被提升为 int：true→1，false→0。"
+    },
     { id: 3101, type: "choice", category: "type", difficulty: 4, knowledgePoint: "整型",
       question: `int a = 7 / 2;\nprintf("%d", a);\n\n输出是？`,
       options: ["3.5", "3", "4", "3.0"],
@@ -351,8 +384,8 @@
 
   ];
 
-  // 修正 2108 答案
-  const q2108 = Q.find(q => q.id === 2108);
+  // 修正 2138（原 2108）答案
+  const q2108 = Q.find(q => q.id === 2138);
   if (q2108) {
     q2108.answer = 1;
     q2108.explanation = "17 ÷ 5 = 3 余 2，所以 17 % 5 = 2。";

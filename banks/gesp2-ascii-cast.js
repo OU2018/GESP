@@ -285,6 +285,41 @@
       options: ["5", "4", "5.0", "3"],
       answer: 1,
       explanation: "(int)3.9=3，(int)1.1=1，3+1=4。与先加再转不同。"
+    },
+    {
+      id: 4401, type: "choice", category: "cast", difficulty: 5, knowledgePoint: "浮点精度",
+      question: `double a = 0.1 + 0.2;\nif (a == 0.3) printf("yes");\nelse printf("no");\n\n输出是？`,
+      options: ["no", "yes", "不确定", "编译错误"],
+      answer: 0,
+      explanation: "0.1、0.2 二进制无法精确表示，0.1+0.2 实际约为 0.30000000000000004，不等于 0.3。浮点数应避免用 == 直接比较。"
+    },
+    {
+      id: 4402, type: "judge", category: "cast", difficulty: 4, knowledgePoint: "浮点精度",
+      question: "由于二进制表示的限制，像 0.1 这样的十进制小数在计算机中通常无法精确存储。",
+      options: ["正确", "错误"],
+      answer: 0,
+      explanation: "0.1 转为二进制是无限循环小数，double 只能近似存储，因此浮点运算可能有微小误差。"
+    },
+    {
+      id: 4403, type: "choice", category: "mixed", difficulty: 4, knowledgePoint: "数学函数 max/min",
+      question: `cout << max(3, 7) + min(3, 7);\n\n输出是？`,
+      options: ["10", "7", "3", "4"],
+      answer: 0,
+      explanation: "max(3,7)=7，min(3,7)=3，7+3=10。max/min 返回两者中较大/较小的值。"
+    },
+    {
+      id: 4404, type: "choice", category: "mixed", difficulty: 5, knowledgePoint: "数学函数 sqrt",
+      question: `cout << sqrt(16);\n\n输出是？`,
+      options: ["4", "4.0", "16", "2"],
+      answer: 0,
+      explanation: "sqrt(16) 返回 double 型 4.0，cout 按默认格式输出为 4。"
+    },
+    {
+      id: 4405, type: "choice", category: "mixed", difficulty: 4, knowledgePoint: "数学函数 abs",
+      question: `int x = -3 - 4;\ncout << abs(x);\n\n输出是？`,
+      options: ["7", "-7", "3", "编译错误"],
+      answer: 0,
+      explanation: "x = -3-4 = -7，abs(x) 取绝对值输出 7。"
     }
   ];
 

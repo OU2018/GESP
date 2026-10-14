@@ -416,12 +416,6 @@
       answer: 0,
       explanation: "a 为 0，&& 短路，(b=10) 不执行，b 仍为 5。"
     },
-    { id: 1503, type: "choice", category: "switch", difficulty: 4, knowledgePoint: "switch 贯穿",
-      question: `int n = 1;\nswitch (n) {\n  case 1: printf("A");\n  case 2: printf("B"); break;\n  default: printf("C");\n}\n\n输出是？`,
-      options: ["A", "B", "AB", "ABC"],
-      answer: 2,
-      explanation: "case 1 无 break，贯穿到 case 2，输出 AB。"
-    },
     { id: 1504, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "switch 字符",
       question: `char c = 'b';\nswitch (c) {\n  case 'a': printf("1"); break;\n  case 'b': printf("2"); break;\n  default: printf("3");\n}\n\n输出是？`,
       options: ["1", "2", "3", "23"],
@@ -513,17 +507,29 @@
       answer: 1,
       explanation: "2+4+6+8+10=30。"
     },
-    { id: 1609, type: "choice", category: "switch", difficulty: 5, knowledgePoint: "switch 贯穿求和",
-      question: `int n = 2, s = 0;\nswitch (n) {\n  case 1: s += 1;\n  case 2: s += 2;\n  case 3: s += 3; break;\n  default: s = 0;\n}\nprintf("%d", s);\n\n输出是？`,
-      options: ["2", "5", "6", "0"],
-      answer: 1,
-      explanation: "从 case 2 贯穿到 case 3：s=2+3=5。"
-    },
     { id: 1610, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "双重循环输出次数",
       question: `int t = 0;\nfor (int i = 1; i <= 4; i++)\n  for (int j = 1; j <= i; j++)\n    t++;\nprintf("%d", t);\n\n输出是？`,
       options: ["4", "8", "10", "16"],
       answer: 2,
       explanation: "1+2+3+4=10 次。"
+    },
+    { id: 1701, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "循环终值",
+      question: `int i;\nfor (i = 1; i <= 5; i++)\n  printf("*");\nprintf("%d", i);\n\n输出是？`,
+      options: ["******6", "******5", "6", "******"],
+      answer: 0,
+      explanation: "i=6 时不满足 i<=5 才退出，循环结束后 i 的值是 6，最后输出 6。"
+    },
+    { id: 1702, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "循环终值",
+      question: `int n = 100, cnt = 0;\nwhile (n > 1) {\n  n = n / 2;\n  cnt++;\n}\nprintf("%d %d", n, cnt);\n\n输出是？`,
+      options: ["1 6", "0 6", "1 5", "0 7"],
+      answer: 0,
+      explanation: "n 依次变为 50,25,12,6,3,1，共循环 6 次；退出时 n=1。"
+    },
+    { id: 1703, type: "choice", category: "loop", difficulty: 5, knowledgePoint: "逗号表达式",
+      question: `int s = 0;\nfor (int i = 0, j = 10; i < j; i++, j--)\n  s++;\nprintf("%d", s);\n\n输出是？`,
+      options: ["5", "10", "4", "6"],
+      answer: 0,
+      explanation: "i 每轮 +1、j 每轮 -1（逗号表达式），i=5、j=5 时不满足 i<j，共 5 轮。"
     }
 
   ];
