@@ -69,6 +69,7 @@ window.GESP_CONFIG = {
     sjy: "苏婧瑜",
     zgf: "郑高菲",
     clx: "陈李洵",
+    wzc: "吴则辰",
     admin: "admin"
   }
 };
