@@ -3114,3 +3114,35 @@ html {
     animation: none !important;
   }
 }
+
+/* ============================================================
+   v1.10.35 真题模式：还原 GESP 真实考试界面（无高亮/无边框/无难度星）
+   ============================================================ */
+body.exam-mode .question-text .q-code-block {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+body.exam-mode .question-text .tok-kw,
+body.exam-mode .question-text .tok-str,
+body.exam-mode .question-text .tok-num,
+body.exam-mode .question-text .tok-com {
+  color: inherit !important;
+  font-weight: inherit !important;
+  font-style: inherit !important;
+}
+body.exam-mode .question-text .diff {
+  display: none !important;
+}
+
+/* 学习优先：隐藏宠物面板与每日打卡（核心是学习，趣味是辅助） */
+body.learn-first #daily-checkin,
+body.learn-first #home-pet,
+body.learn-first #btn-pet {
+  display: none !important;
+}
+
+/* 真题练习面板边框 */
+.panel-exam {
+  border-color: rgba(59, 130, 246, 0.35);
+}

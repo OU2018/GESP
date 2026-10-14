@@ -374,17 +374,6 @@ function registerBuiltinDebugTests() {
   if (window._gespDebugTestsReady) return;
   window._gespDebugTestsReady = true;
 
-  registerDebugTest("邮件", "投递：欢迎信", () => forceMailById("welcome_default"), "忽略条件强制投递");
-  registerDebugTest("邮件", "投递：卢柏铮生日", () => forceMailById("bday_lubozheng"));
-  registerDebugTest("邮件", "投递：蔡小婧生日", () => forceMailById("bday_caixiaojing"));
-  registerDebugTest("邮件", "乱流·电子管1906", () => forceMailById("turb_1906_tube"));
-  registerDebugTest("邮件", "乱流·ENIAC1946", () => forceMailById("turb_1946_eniac"));
-  registerDebugTest("邮件", "乱流·晶体管1947", () => forceMailById("turb_1947_transistor"));
-  registerDebugTest("邮件", "乱流·集成电路1958", () => forceMailById("turb_1958_ic"));
-  registerDebugTest("邮件", "乱流·阿帕网1969", () => forceMailById("turb_1969_arpa"));
-  registerDebugTest("邮件", "乱流·微处理器1971", () => forceMailById("turb_1971_micro"));
-  registerDebugTest("邮件", "乱流·PC1981", () => forceMailById("turb_1981_pc"));
-  registerDebugTest("邮件", "乱流·WWW1991", () => forceMailById("turb_1991_www"));
   registerDebugTest("词条", "打开词条页", () => { if(typeof openCodexView==="function") openCodexView(); return "ok"; });
   registerDebugTest("词条", "强制解锁全部", () => {
     if (!data.codex) data.codex = { unlocked: {}, viewed: {}, milestones: {} };
@@ -392,7 +381,7 @@ function registerBuiltinDebugTests() {
     list.forEach(e => { data.codex.unlocked[e.id] = Date.now(); });
     saveData(data); return "已解锁 " + list.length;
   });
-  registerDebugTest("词条", "模拟读满触发邮件", () => {
+  registerDebugTest("词条", "模拟读满触发里程碑", () => {
     if (!data.codex) data.codex = { unlocked: {}, viewed: {}, milestones: {} };
     const list = (window.CODEX_DATA && window.CODEX_DATA.CODEX_ENTRIES) || [];
     list.forEach(e => { data.codex.unlocked[e.id] = Date.now(); data.codex.viewed[e.id] = Date.now(); });
@@ -401,39 +390,6 @@ function registerBuiltinDebugTests() {
     if (typeof checkCodexMilestones === "function") checkCodexMilestones();
     return "已阅读 " + list.length + " 并检查里程碑";
   });
-  registerDebugTest("邮件", "暗线1·第零错误", () => forceMailById("dark_line_1"));
-  registerDebugTest("邮件", "暗线2·未命名", () => forceMailById("dark_line_2"));
-  registerDebugTest("邮件", "暗线3·上交签名", () => forceMailById("dark_line_3"));
-  registerDebugTest("邮件", "先驱者·图灵1", () => forceMailById("quest_turing_1"));
-  registerDebugTest("邮件", "先驱者·图灵2交付", () => forceMailById("quest_turing_2"));
-  registerDebugTest("邮件", "先驱者·香农1", () => forceMailById("quest_shannon_1"));
-  registerDebugTest("邮件", "先驱者·香农2", () => forceMailById("quest_shannon_2"));
-  registerDebugTest("邮件", "先驱者·冯诺依曼1", () => forceMailById("quest_von_1"));
-  registerDebugTest("邮件", "先驱者·冯诺依曼2", () => forceMailById("quest_von_2"));
-  registerDebugTest("邮件", "先驱者·终章", () => forceMailById("quest_alliance_end"));
-  registerDebugTest("邮件", "考前4周信", () => forceMailById("exam_20260912_4w"));
-  registerDebugTest("邮件", "考前3周信", () => forceMailById("exam_20260912_3w"));
-  registerDebugTest("邮件", "考前2周信", () => forceMailById("exam_20260912_2w"));
-  registerDebugTest("邮件", "考前1周信", () => forceMailById("exam_20260912_1w"));
-  registerDebugTest("邮件", "考试日信", () => forceMailById("exam_20260912_day"));
-  registerDebugTest("邮件", "投递：全部模板", () => forceAllMails(), "每封都强制入箱（可重复）");
-  registerDebugTest("邮件", "打开收件箱", () => { if (typeof openMailView==="function") openMailView(); return "已打开"; });
-  registerDebugTest("邮件", "清空收件箱", () => {
-    if (!data.mail) return "无邮件数据";
-    data.mail.inbox = [];
-    data.mail.delivered = {};
-    data.mail.lastWeekly = {};
-    saveData(data);
-    if (typeof updateMailBadges==="function") updateMailBadges();
-    return "已清空";
-  });
-  registerDebugTest("邮件", "模拟姓名=卢柏铮", () => {
-    data.userName = "卢柏铮"; saveData(data); refreshUserDisplay();
-    if (typeof checkAndDeliverMails==="function") checkAndDeliverMails();
-    if (typeof updateMailBadges==="function") updateMailBadges();
-    return "姓名已设为卢柏铮并检查投递";
-  });
-
   registerDebugTest("经济", "+100 Byte", () => { data.bytes=(data.bytes||0)+100; saveData(data); updateHome(); return data.bytes; });
   registerDebugTest("经济", "+5 KB", () => { data.kb=(data.kb||0)+5; saveData(data); updateHome(); return data.kb; });
   registerDebugTest("经济", "+1 MB", () => { data.mb=(data.mb||0)+1; saveData(data); updateHome(); return data.mb; });
@@ -467,7 +423,7 @@ function registerBuiltinDebugTests() {
   });
 }
 
-/** 强制投递一封邮件（测试用，可重复） */
+/** 测试：播放宠物孵化动画 */
 function testHatchAnim(rarity) {
   rarity = rarity || "N";
   const mock = {
@@ -484,43 +440,6 @@ function testHatchAnim(rarity) {
   playHatchAnimation(rarity, mock, { force: true });
   return "播放 " + rarity + " 孵化过场";
 }
-function forceMailById(templateId) {
-  const list = (window.MAIL_DATA && window.MAIL_DATA.MAIL_TEMPLATES) || [];
-  const tpl = list.find(t => t.id === templateId);
-  if (!tpl) return "找不到模板 " + templateId;
-  if (!data.mail) data.mail = { delivered: {}, inbox: [], lastWeekly: {}, claimedAttach: {}, deliveredQuest: {} };
-  const name = typeof getDisplayName === "function" ? getDisplayName() : (data.userName || "同学");
-  const level = getPlayerLevelInfo().level;
-  const body = String(tpl.body || "").replace(/\{\{name\}\}/g, name).replace(/\{\{level\}\}/g, String(level)).replace(/\{\{date\}\}/g, new Date().toISOString().slice(0,10));
-  const title = String(tpl.title || "").replace(/\{\{name\}\}/g, name).replace(/\{\{level\}\}/g, String(level));
-  data.mail.inbox.unshift({
-    id: tpl.id + "_test_" + Date.now(),
-    templateId: tpl.id,
-    from: tpl.from || "测试",
-    title, body,
-    at: Date.now(),
-    read: false,
-    attachments: tpl.attachments ? JSON.parse(JSON.stringify(tpl.attachments)) : [],
-    requireDelivery: tpl.requireDelivery ? JSON.parse(JSON.stringify(tpl.requireDelivery)) : [],
-    afterDeliverAttachments: tpl.afterDeliverAttachments ? JSON.parse(JSON.stringify(tpl.afterDeliverAttachments)) : [],
-    attachClaimed: false,
-    questDone: false,
-    storyNote: tpl.storyNote || ""
-  });
-  data.mail.delivered[tpl.id] = Date.now();
-  saveData(data);
-  if (typeof updateMailBadges === "function") updateMailBadges();
-  return "已投递「" + title + "」";
-}
-
-function forceAllMails() {
-  const list = (window.MAIL_DATA && window.MAIL_DATA.MAIL_TEMPLATES) || [];
-  let n = 0;
-  list.forEach(t => { forceMailById(t.id); n++; });
-  return "已投递 " + n + " 封";
-}
-
-
 function runBankSelfCheck() {
   const issues = validateQuestionBanks(50);
   const box = document.getElementById("debug-validate-result");
@@ -862,7 +781,8 @@ function defaultGlobalSettings() {
     petBless: true,
     focusMode: false,
     strictMode: true,
-    noCopyCode: false
+    noCopyCode: false,
+    learnFirst: true
   };
 }
 
@@ -948,7 +868,8 @@ function migrateToV3(raw) {
     petBless: os.petBless != null ? !!os.petBless : true,
     focusMode: os.focusMode != null ? !!os.focusMode : false,
     strictMode: os.strictMode != null ? !!os.strictMode : true,
-    noCopyCode: os.noCopyCode != null ? !!os.noCopyCode : false
+    noCopyCode: os.noCopyCode != null ? !!os.noCopyCode : false,
+    learnFirst: os.learnFirst != null ? !!os.learnFirst : true
   });
 
   // 题库设置（旧 complexity/enableString 迁到 printf）
@@ -1240,7 +1161,7 @@ function recordDailyProgress(bankId, total, correct) {
   try {
     const b = QUESTION_BANKS && QUESTION_BANKS[bankId];
     if (b && (b.excludeFromDaily || b.specialMode || b.requiresUnlock)) return;
-    if (bankId === "eval-mode") return;
+    if (bankId === "eval-mode" || bankId === "exam-paper") return;
   } catch (e) {}
   const dp = ensureDailyProgress();
   if (!dp.banks[bankId]) dp.banks[bankId] = { done: 0, correct: 0 };
@@ -1356,6 +1277,7 @@ function setBankSetting(key, value) {
 
 let data = loadData();
 applyNoCopyCode();
+applyLearnFirstUI();
 if (typeof window !== "undefined") {
   Object.defineProperty(window, "data", {
     get() { return data; },
@@ -1668,6 +1590,15 @@ function applyNoCopyCode() {
   const on = !!(data && data.settings && data.settings.noCopyCode);
   document.body.classList.toggle("no-copy-code", on);
 }
+
+/* —— 学习优先（v1.10.35）：隐藏宠物/每日打卡等趣味模块，学习为核心、趣味为辅助 —— */
+function isLearnFirst() {
+  try { return !!(data && data.settings && data.settings.learnFirst !== false); } catch (e) { return true; }
+}
+function applyLearnFirstUI() {
+  const on = isLearnFirst();
+  document.body.classList.toggle("learn-first", on);
+}
 document.addEventListener("copy", (e) => {
   if (!document.body.classList.contains("no-copy-code")) return;
   const sel = window.getSelection ? window.getSelection() : null;
@@ -1804,7 +1735,7 @@ function applyFocusModeUI() {
   const petPanel = document.getElementById("home-pet");
   // 专注：弱化右侧养成，不删功能，仅视觉与入口
   if (petCol) petCol.classList.toggle("focus-dim", on);
-  ["btn-pet", "btn-mail", "btn-codex", "btn-achieve"].forEach(id => {
+  ["btn-pet", "btn-codex", "btn-achieve"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = on ? "none" : "";
   });
@@ -1876,7 +1807,7 @@ function initHomeModeTabs() {
       }
       if (tab.hidden) return;
       tabs.forEach(t => t.classList.toggle("active", t === tab));
-      ["train", "race", "eval"].forEach(name => {
+      ["train", "race", "exam", "eval"].forEach(name => {
         const panel = document.getElementById("home-tab-" + name);
         if (!panel) return;
         const on = name === id;
@@ -1887,12 +1818,16 @@ function initHomeModeTabs() {
       if (id === "race") {
         try { if (typeof refreshRaceMaxInfo === "function") refreshRaceMaxInfo(); } catch (e) {}
       }
+      if (id === "exam") {
+        try { refreshExamLastInfo(); } catch (e) {}
+      }
       if (id === "eval") {
         try { if (typeof refreshEvalPanel === "function") refreshEvalPanel(); } catch (e) {}
       }
     };
   });
   try { refreshEvalPanel(); } catch (e) {}
+  try { refreshExamLastInfo(); } catch (e) {}
 }
 
 function goHomeFromSubpage() {
@@ -1912,7 +1847,6 @@ function bindTopBackButtons() {
     ["btn-wrong-back-top", () => goHomeFromSubpage()],
     ["btn-history-back-top", () => goHomeFromSubpage()],
     ["btn-achieve-back-top", () => goHomeFromSubpage()],
-    ["btn-mail-back-top", () => goHomeFromSubpage()],
     ["btn-changelog-back-top", () => goHomeFromSubpage()],
     ["btn-codex-back-top", () => {
       if (typeof requestCodexLeave === "function") {
@@ -2020,8 +1954,6 @@ function updateHome() {
     }
   } catch (e) {}
   refreshUserDisplay();
-  try { if (typeof checkAndDeliverMails === "function") { checkAndDeliverMails(); updateMailBadges(); } } catch (e) {}
-
 }
 
 function updateStreak() {
@@ -2365,7 +2297,8 @@ const MODE_LABELS = {
   history: "计算机历史",
   assign: "赋值",
   rel: "关系运算",
-  inc: "自增自减"
+  inc: "自增自减",
+  exam: "真题练习"
 };
 
 
@@ -2395,6 +2328,7 @@ function startEvalMode() {
   quiz.answers = [];
   quiz.isRace = false;
   quiz.isEval = true;
+  quiz.isExam = false;
   quiz.startTime = Date.now();
   // 关闭竞速计时样式
   try { if (typeof stopRaceTimers === "function") stopRaceTimers(); } catch (e) {}
@@ -2403,6 +2337,109 @@ function startEvalMode() {
     view.classList.remove("race-mode");
     view.classList.add("eval-mode");
   }
+  showView("quiz-view");
+  try { renderQuestion(); } catch (e) { console.warn(e); }
+}
+
+/* ========== 真题练习模式（v1.10.35） ==========
+ * 仿 GESP 一级真实试卷客观题部分：选择 15 + 判断 10，每题 2 分，满分 50。
+ * 组卷比重对齐近年一级真题：基本运算符 ~5、循环/分支 ~5、数据类型与标识符 ~2、
+ * 计算机基础 ~2、输入输出 ~1；判断题跨知识点混合。
+ * 界面还原真实考试：无代码高亮、无装饰边框、隐藏难度星；无单题倒计时。
+ * 仅计成绩，不发放 XP/Byte/蛋，不计入每日打卡（核心是学习）。
+ */
+function examPoolFrom(type, cats, bankIds) {
+  let pool = [];
+  (bankIds || []).forEach(id => {
+    const b = QUESTION_BANKS[id];
+    ((b && b.staticQuestions) || []).forEach(q => {
+      if (q.type !== type) return;
+      if (cats && cats.indexOf(q.category) < 0) return;
+      if (isQuestionRemoved(q)) return;
+      if (!isStringEnabled() && isStringRelated(q)) return;
+      pool.push(Object.assign({}, q, { _fromBank: id }));
+    });
+  });
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  return pool;
+}
+
+function buildExamPaper() {
+  const used = new Set();
+  const take = (pool, n) => {
+    const out = [];
+    for (let i = 0; i < pool.length && out.length < n; i++) {
+      const sig = questionSignature(pool[i]);
+      if (used.has(sig)) continue;
+      used.add(sig);
+      out.push(pool[i]);
+    }
+    return out;
+  };
+  const allChoiceBanks = ["real-exam", "control-flow", "data-ops", "computer-basics", "printf-scanf"];
+  const paper = [];
+  // —— 选择 15（对齐 GESP 一级真题知识点比重）——
+  paper.push(...take(examPoolFrom("choice", ["arith", "rel", "logic", "assign", "inc"], ["data-ops", "real-exam"]), 5)); // 基本运算符 ~5
+  paper.push(...take(examPoolFrom("choice", ["loop", "branch", "switch"], ["control-flow", "real-exam"]), 5));          // 循环/分支 ~5
+  paper.push(...take(examPoolFrom("choice", ["type", "ident"], ["data-ops", "real-exam"]), 2));                          // 数据类型与标识符 ~2
+  paper.push(...take(examPoolFrom("choice", ["hardware", "storage", "process", "os", "ide", "history"], ["computer-basics", "real-exam"]), 2)); // 计算机基础 ~2
+  paper.push(...take(examPoolFrom("choice", ["output", "format", "scanf", "error"], ["printf-scanf", "real-exam"]), 1)); // 输入输出 ~1
+  const lackChoice = 15 - paper.length;
+  if (lackChoice > 0) paper.push(...take(examPoolFrom("choice", null, allChoiceBanks), lackChoice));
+  // —— 判断 10（跨知识点混合）——
+  paper.push(...take(examPoolFrom("judge", null, ["control-flow", "data-ops", "computer-basics", "printf-scanf", "real-exam"]), 10));
+  return paper;
+}
+
+function refreshExamLastInfo() {
+  const el = document.getElementById("exam-last-info");
+  if (!el) return;
+  const recs = (data.history || []).filter(h => h.bankId === "exam-paper");
+  if (!recs.length) {
+    el.textContent = "尚无成绩记录 · 满分 50（每题 2 分）";
+    return;
+  }
+  const last = recs[recs.length - 1];
+  const best = recs.reduce((m, r) => Math.max(m, r.accuracy || 0), 0);
+  el.textContent = `上次：${last.correct * 2}/50（${last.correct}/${last.total} 题） · 最佳正确率 ${best}% · 满分 50（每题 2 分）`;
+}
+
+function startExamMode() {
+  const list = buildExamPaper();
+  if (!list.length) {
+    try { uiToast("真题题库未加载或为空", "error"); } catch (e) {}
+    return;
+  }
+  currentBankId = "exam-paper";
+  currentMode = "exam";
+  quiz.list = list;
+  quiz.index = 0;
+  quiz.correct = 0;
+  quiz.wrong = 0;
+  quiz.combo = 0;
+  quiz.maxCombo = 0;
+  quiz.xp = 0;
+  quiz.startTime = Date.now();
+  quiz.answerTimes = [];
+  quiz.qStartTime = Date.now();
+  quiz.sessionOkKps = [];
+  quiz.sessionWrongKps = [];
+  quiz.answers = [];
+  quiz.isRace = false;
+  quiz.isEval = false;
+  quiz.isExam = true;
+  try { if (typeof stopRaceTimers === "function") stopRaceTimers(); } catch (e) {}
+  try { clearRaceSessionTimer(); } catch (e) {}
+  const view = document.getElementById("quiz-view");
+  if (view) {
+    view.classList.remove("race-mode");
+    view.classList.remove("eval-mode");
+  }
+  document.body.classList.add("exam-mode");
+  document.getElementById("mode-label").textContent = MODE_LABELS.exam || "真题练习";
   showView("quiz-view");
   try { renderQuestion(); } catch (e) { console.warn(e); }
 }
@@ -2616,6 +2653,8 @@ async function startRaceMode() {
   quiz.answerTimes = [];
   quiz.qStartTime = Date.now();
   quiz.isRace = true;
+  quiz.isEval = false;
+  quiz.isExam = false;
   quiz.raceBank = bank;
   currentMode = "race";
   if (bank !== "all") currentBankId = bank;
@@ -2659,6 +2698,8 @@ async function startQuiz() {
   quiz.sessionWrongKps = [];
   quiz.answers = [];
   quiz.isRace = false;
+  quiz.isEval = false;
+  quiz.isExam = false;
   clearRaceSessionTimer();
   document.getElementById("mode-label").textContent = MODE_LABELS[currentMode] || "综合";
   showView("quiz-view");
@@ -2761,6 +2802,7 @@ function renderQuestion() {
 function startQuestionTimer() {
   clearInterval(quiz.timer);
   if (quiz.isRace) return;
+  if (quiz.isExam) return; // 真题模式：整卷作答，不做单题倒计时
   if (data.settings.timePerQ > 0) {
     quiz.timeLeft = data.settings.timePerQ;
     updateTimerDisplay();
@@ -3382,7 +3424,7 @@ function finishQuiz() {
     }
   } catch (e) {}
   data.history.push(record);
-  recordDailyProgress(currentBankId, total, quiz.correct);
+  if (!quiz.isExam) recordDailyProgress(currentBankId, total, quiz.correct);
   try {
     const sigs = (quiz.list || []).map(questionSignature).filter(Boolean);
     pushRecentSigs(sigs);
@@ -3393,11 +3435,12 @@ function finishQuiz() {
   const rawXp = quiz.xp;
   quiz.xp = Math.max(0, Math.round(rawXp * settle.mult));
   quiz.rawXp = rawXp;
-  data.totalXp = (data.totalXp || 0) + quiz.xp;
-  const byteGain = grantPracticeBytes(quiz, settle.mult);
-  const eggDrops = rollPracticeEggs(quiz, acc, settle.mult);
+  if (!quiz.isExam) data.totalXp = (data.totalXp || 0) + quiz.xp;
+  // 真题模式：只判卷记成绩，不发放 Byte/蛋（核心是学习，趣味是辅助）
+  const byteGain = quiz.isExam ? { gained: 0 } : grantPracticeBytes(quiz, settle.mult);
+  const eggDrops = quiz.isExam ? [] : rollPracticeEggs(quiz, acc, settle.mult);
   let syncPermitGain = 0;
-  if (acc >= 90 && total >= 8) {
+  if (!quiz.isExam && acc >= 90 && total >= 8) {
     if (!data.questItems) data.questItems = {};
     // 高质量轨迹：每次达标练习 +1，单日最多 3 张，防止囤积破经济
     if (!data.dailySync) data.dailySync = { date: "", n: 0 };
@@ -3414,6 +3457,27 @@ function finishQuiz() {
   data.stats.banksPlayed = data.stats.banksPlayed || {};
   data.stats.banksPlayed[currentBankId] = true;
   saveData(data);
+  if (quiz.isExam) {
+    // 真题模式结算：只出判卷结果，不触发成就/连续打卡/宠物奖励
+    document.body.classList.remove("exam-mode");
+    const score = quiz.correct * 2;
+    document.getElementById("r-total").textContent = total;
+    document.getElementById("r-correct").textContent = quiz.correct;
+    document.getElementById("r-wrong").textContent = quiz.wrong;
+    document.getElementById("r-acc").textContent = acc + "%";
+    document.getElementById("r-combo").textContent = quiz.maxCombo;
+    document.getElementById("r-xp").textContent = "—";
+    document.getElementById("r-time").textContent = formatDuration(duration);
+    const examBox = `<div class="settle-box" style="margin-top:12px;line-height:1.6">
+      <div>📄 真题练习 · 客观题得分 <strong>${score} / 50</strong></div>
+      <div style="font-size:0.85em;color:#94a3b8">真实试卷另有编程题 2 道 × 25 分，请在 IDE 中单独练习。真题模式不发放 XP/Byte，不计入每日打卡。</div>
+    </div>`;
+    box.innerHTML = compareHtml + examBox;
+    try { renderResultKnowledge(); } catch (e) {}
+    showView("result-view");
+    updateHome();
+    return;
+  }
   updateStreak();
   let petCtx = {};
   try {
@@ -3486,13 +3550,6 @@ function finishQuiz() {
 
   showView("result-view");
   updateHome();
-  try {
-    if (acc === 100 && total >= 8 && typeof forceMailById === "function") {
-      if (!data.mail) data.mail = { delivered: {}, inbox: [], lastWeekly: {} };
-      if (!data.mail.delivered["first_perfect"]) forceMailById("first_perfect");
-    }
-    if (typeof checkAndDeliverMails === "function") { checkAndDeliverMails(); updateMailBadges(); }
-  } catch (e) {}
 }
 
 /* ========== 错题本 ========== */
@@ -3852,7 +3909,10 @@ function saveSettingsFromUI() {
   data.settings.strictMode = strictEl ? strictEl.value === "1" : true;
   const nccEl = document.querySelector('input[name="noCopyCode"]:checked');
   data.settings.noCopyCode = nccEl ? nccEl.value === "1" : false;
+  const lfEl = document.querySelector('input[name="learnFirst"]:checked');
+  data.settings.learnFirst = lfEl ? lfEl.value === "1" : true;
   applyNoCopyCode();
+  applyLearnFirstUI();
   // 题库级
   const compEl = document.querySelector('input[name="complexity"]:checked');
   if (compEl) setBankSetting("complexity", +compEl.value);
@@ -4227,7 +4287,6 @@ if (btnTestSound) btnTestSound.onclick = () => {
 };
 
 
-try { if (typeof initMailSystem === "function") initMailSystem(); } catch (e) {}
 try { if (typeof unlockCodexProgress === "function") unlockCodexProgress(); } catch (e) {}
 try { if (typeof refreshBankSelect === "function") refreshBankSelect(); } catch (e) {}
 try { initHomeModeTabs(); } catch (e) {}
@@ -4235,6 +4294,10 @@ try { bindTopBackButtons(); } catch (e) {}
 try {
   const btnEvalStart = document.getElementById("btn-eval-start");
   if (btnEvalStart) btnEvalStart.onclick = () => startEvalMode();
+} catch (e) {}
+try {
+  const btnExamStart = document.getElementById("btn-exam-start");
+  if (btnExamStart) btnExamStart.onclick = () => startExamMode();
 } catch (e) {}
 try { if (typeof normalizeWallet === "function") normalizeWallet(); } catch (e) {}
 

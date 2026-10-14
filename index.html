@@ -6,9 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="app-version" content="1.10.34">
+  <meta name="app-version" content="1.10.35">
   <title>GESP C++ 一级 · 专项刷题训练</title>
-  <link rel="stylesheet" href="style.css?v=1.10.34">
+  <link rel="stylesheet" href="style.css?v=1.10.35">
 </head>
 <body>
   <div id="app">
@@ -47,6 +47,7 @@
           <div class="home-mode-tabs" id="home-mode-tabs" role="tablist">
             <button type="button" class="home-mode-tab active" data-home-tab="train" role="tab">🚀 训练</button>
             <button type="button" class="home-mode-tab" data-home-tab="race" role="tab">⚡ 竞速</button>
+            <button type="button" class="home-mode-tab" data-home-tab="exam" role="tab">📄 真题</button>
             <button type="button" class="home-mode-tab" data-home-tab="eval" role="tab" id="home-mode-tab-eval" hidden aria-hidden="true">🧪 评测</button>
           </div>
 
@@ -111,6 +112,18 @@
             </section>
           </div>
 
+          <div class="home-mode-panel" id="home-tab-exam" role="tabpanel" hidden>
+            <section class="home-panel panel-exam">
+              <div class="panel-head panel-head-blue">
+                <span class="panel-icon">📄</span><span>真题练习模式</span>
+                <span class="race-remain">选择 15×2' + 判断 10×2'</span>
+              </div>
+              <p class="setting-hint race-hint">仿 GESP 一级真实试卷：代码无高亮、无装饰边框，难度星隐藏；客观题按一级真题知识点比重组卷（编程题另练）· 整卷 40 分钟 · 不计入每日打卡</p>
+              <div class="race-max" id="exam-last-info">尚无成绩记录 · 满分 50（每题 2 分）</div>
+              <button class="btn-primary btn-race-lg" id="btn-exam-start">📄 开始真题练习</button>
+            </section>
+          </div>
+
           <div class="home-mode-panel" id="home-tab-eval" role="tabpanel" hidden aria-hidden="true">
             <section class="home-panel panel-eval" id="eval-mode-panel">
               <div class="panel-head panel-head-teal">
@@ -126,13 +139,12 @@
 
         <!-- 右：辅助入口 -->
         <aside class="home-col home-col-right home-panel panel-pet">
-          <div class="panel-head panel-head-amber"><span class="panel-icon">🐾</span><span>进程（可选）</span></div>
+          <div class="panel-head panel-head-amber"><span class="panel-icon">🧭</span><span>辅助入口</span></div>
           <div class="home-pet-panel" id="home-pet" style="cursor:pointer;" title="养成辅助，非刷题主线">
             <div class="home-pet-emoji" id="home-pet-emoji">💾</div>
             <div class="home-pet-label" id="home-pet-label">加载中…</div>
           </div>
           <button class="btn-secondary btn-side-lg" id="btn-pet">进程管理</button>
-          <button class="btn-secondary btn-side-lg" id="btn-mail">📧 邮件 <span class="badge-num" data-mail-badge style="display:none;"></span></button>
           <button class="btn-secondary btn-side-lg" id="btn-codex">📖 词条</button>
           <button class="btn-secondary btn-side-lg" id="btn-achieve">🏅 成就</button>
           <button class="btn-secondary btn-side-lg" id="btn-changelog">📝 更新</button>
@@ -251,7 +263,15 @@
               <label><input type="radio" name="focusMode" value="1"> 开启</label>
               <label><input type="radio" name="focusMode" value="0" checked> 关闭</label>
             </div>
-            <div class="setting-hint">隐藏宠物/邮件/词条等辅助入口，突出刷题与错题；养成仍可从结算偶尔获得奖励</div>
+            <div class="setting-hint">隐藏词条/成就等辅助入口，突出刷题与错题；养成仍可从结算偶尔获得奖励</div>
+          </div>
+          <div class="setting-group">
+            <label>学习优先（推荐）</label>
+            <div class="radio-group">
+              <label><input type="radio" name="learnFirst" value="1" checked> 开启（默认）</label>
+              <label><input type="radio" name="learnFirst" value="0"> 关闭</label>
+            </div>
+            <div class="setting-hint">开启后隐藏宠物「进程」与每日打卡等趣味模块，界面聚焦学习；关闭后恢复完整养成玩法</div>
           </div>
           <div class="setting-group">
             <label>词条严格模式</label>
@@ -393,22 +413,9 @@
       <div class="panel home-panel panel-codex subpage-panel panel-codex-full">
         <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-codex-back-top">← 首页</button><span class="subpage-top-title">📖 词条</span></div>
         <div class="panel-head panel-head-purple"><span class="panel-icon">📖</span><span>词条图鉴 · GESP 一级基础</span></div>
-        <p class="setting-hint">计算机发展、硬件软件、数制与网络等常识。阅读达标可触发特殊精灵邮件任务。</p>
+        <p class="setting-hint">计算机发展、硬件软件、数制与网络等常识，配合训练巩固基础。</p>
         <div id="codex-root"></div>
         <button class="btn-secondary btn-action" id="btn-codex-back">返回首页</button>
-      </div>
-    </div>
-
-    <!-- 邮件页面 -->
-    <div id="mail-view" class="view">
-      <div class="panel home-panel panel-mail subpage-panel">
-        <div class="subpage-topbar"><button type="button" class="btn-back-top" id="btn-mail-back-top">← 首页</button><span class="subpage-top-title">📧 邮件</span></div>
-        <div class="panel-head panel-head-cyan"><span class="panel-icon">📧</span><span>收件箱</span>
-          <button type="button" class="btn-secondary btn-sm" id="btn-mail-allread" style="margin-left:auto;">全部已读</button>
-        </div>
-        <p class="setting-hint">生日、节日、等级等特殊邮件会自动送达（规则写在 system/mail-data.js）</p>
-        <div id="mail-list" class="mail-list"></div>
-        <button class="btn-secondary btn-action" id="btn-mail-back">返回首页</button>
       </div>
     </div>
 
@@ -525,7 +532,7 @@
   <canvas id="particles"></canvas>
     <script>
 (function () {
-  var EMBEDDED = "1.10.34";
+  var EMBEDDED = "1.10.35";
   try {
     var forced = localStorage.getItem("gesp_force_reload");
     if (forced && forced === EMBEDDED) localStorage.removeItem("gesp_force_reload");
@@ -538,7 +545,7 @@
     } catch (e) {}
     function go() {
       var path = location.pathname;
-      location.replace(path + "?v=1.10.34&_t=" + Date.now());
+      location.replace(path + "?v=1.10.35&_t=" + Date.now());
     }
     var tasks = [];
     try {
@@ -584,23 +591,21 @@
 })();
 </script>
 
-<script src="config.js?v=1.10.34"></script>
-  <script src="banks/printf-scanf.js?v=1.10.34"></script>
-  <script src="banks/control-flow.js?v=1.10.34"></script>
-  <script src="banks/eval-mode.js?v=1.10.34"></script>
-  <script src="banks/real-exam.js?v=1.10.34"></script>
-  <script src="banks/computer-basics.js?v=1.10.34"></script>
-  <script src="banks/gesp2-ascii-cast.js?v=1.10.34"></script>
-  <script src="banks/data-ops.js?v=1.10.34"></script>
-  <script src="system/pet-data.js?v=1.10.34"></script>
-  <script src="system/pet.js?v=1.10.34"></script>
-  <script src="system/activate-codes.js?v=1.10.34"></script>
-  <script src="system/changelog.js?v=1.10.34"></script>
-  <script src="system/codex-data.js?v=1.10.34"></script>
-  <script src="system/codex.js?v=1.10.34"></script>
-  <script src="system/mail-data.js?v=1.10.34"></script>
-  <script src="system/mail.js?v=1.10.34"></script>
-  <script src="system/achievements.js?v=1.10.34"></script>
-  <script src="script.js?v=1.10.34"></script>
+<script src="config.js?v=1.10.35"></script>
+  <script src="banks/printf-scanf.js?v=1.10.35"></script>
+  <script src="banks/control-flow.js?v=1.10.35"></script>
+  <script src="banks/eval-mode.js?v=1.10.35"></script>
+  <script src="banks/real-exam.js?v=1.10.35"></script>
+  <script src="banks/computer-basics.js?v=1.10.35"></script>
+  <script src="banks/gesp2-ascii-cast.js?v=1.10.35"></script>
+  <script src="banks/data-ops.js?v=1.10.35"></script>
+  <script src="system/pet-data.js?v=1.10.35"></script>
+  <script src="system/pet.js?v=1.10.35"></script>
+  <script src="system/activate-codes.js?v=1.10.35"></script>
+  <script src="system/changelog.js?v=1.10.35"></script>
+  <script src="system/codex-data.js?v=1.10.35"></script>
+  <script src="system/codex.js?v=1.10.35"></script>
+  <script src="system/achievements.js?v=1.10.35"></script>
+  <script src="script.js?v=1.10.35"></script>
 </body>
 </html>
