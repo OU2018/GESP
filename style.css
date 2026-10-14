@@ -1968,9 +1968,23 @@ body { overflow-x: hidden; }
   white-space: pre-wrap;
   word-break: break-word;
   overflow-x: auto;
-  margin: 0;
-  font-family: inherit;
+  margin: 6px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border, #334155);
+  border-radius: 8px;
+  background: #0b1220;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Cascadia Code", monospace;
+  font-size: 0.92rem;
   line-height: 1.55;
+}
+.question-text .tok-kw  { color: #c084fc; font-weight: 600; }
+.question-text .tok-str { color: #86efac; }
+.question-text .tok-num { color: #fbbf24; }
+.question-text .tok-com { color: #64748b; font-style: italic; }
+body.no-copy-code .question-text .q-code-block {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 .question-text .diff {
   white-space: normal;

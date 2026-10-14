@@ -861,7 +861,8 @@ function defaultGlobalSettings() {
     hatchAnim: true,
     petBless: true,
     focusMode: false,
-    strictMode: true
+    strictMode: true,
+    noCopyCode: false
   };
 }
 
@@ -946,7 +947,8 @@ function migrateToV3(raw) {
     hatchAnim: os.hatchAnim != null ? !!os.hatchAnim : true,
     petBless: os.petBless != null ? !!os.petBless : true,
     focusMode: os.focusMode != null ? !!os.focusMode : false,
-    strictMode: os.strictMode != null ? !!os.strictMode : true
+    strictMode: os.strictMode != null ? !!os.strictMode : true,
+    noCopyCode: os.noCopyCode != null ? !!os.noCopyCode : false
   });
 
   // 题库设置（旧 complexity/enableString 迁到 printf）
@@ -1353,6 +1355,7 @@ function setBankSetting(key, value) {
 }
 
 let data = loadData();
+applyNoCopyCode();
 if (typeof window !== "undefined") {
   Object.defineProperty(window, "data", {
     get() { return data; },
@@ -1594,11 +1597,48 @@ function formatDuration(sec) {
   return s > 0 ? `${m}分${s}秒` : `${m}分钟`;
 }
 
-/* 高亮空白：___ 或连续下划线整段作为一个标记 */
+/* —— 题目代码：编译器式语法高亮（v1.10.34） —— */
+
+/* 判断一行文本是否像 C/C++ 代码 */
+function looksLikeCodeLine(line) {
+  const s = line.trim();
+  if (!s) return false;
+  if (/^#/.test(s)) return true;                       // #include / #define
+  if (/[;{}]\s*$/.test(s)) return true;                // 以 ; { } 结尾
+  const m = s.match(/^(int|char|float|double|bool|void|long|short|unsigned|signed|const|struct|return|if|else|for|while|do|switch|case|break|continue|cout|cin|printf|scanf|using|namespace|std|main|string|true|false)\b/);
+  if (m && !/[\u4e00-\u9fff]/.test(s.slice(m[1].length, m[1].length + 1))) return true; // 关键字开头且后接非中文
+  if (/\b(printf|scanf)\s*\(/.test(s)) return true;    // printf / scanf 调用
+  if (/\b(cout|cin)\b\s*(<<|>>)/.test(s)) return true; // 流操作
+  // 纯赋值语句（如 sum += i / a[0] = 5），排除含中文的说明文字
+  if (!/[\u4e00-\u9fff]/.test(s) && /^[A-Za-z_][\w\s\[\]\.]*?(\+|-|\*|\/|%)?=(?!=)/.test(s)) return true;
+  return false;
+}
+
+/* 对已 escapeHtml 的代码文本做单遍 token 高亮（关键字/字符串/字符/注释/数字） */
+function highlightCCode(escaped) {
+  const re = /(&quot;(?:[^&]|&(?!quot;))*?&quot;|'(?:\\.|[^'\\])*?')|(\/\/[^\n]*)|\b(\d+(?:\.\d+)?)\b|\b(int|char|float|double|bool|void|long|short|unsigned|signed|const|struct|return|if|else|for|while|do|switch|case|default|break|continue|true|false|sizeof|using|namespace|std|include|define|main|string|cout|cin|endl|printf|scanf)\b/g;
+  return escaped.replace(re, (m, str, com, num, kw) => {
+    if (str) return `<span class="tok-str">${str}</span>`;
+    if (com) return `<span class="tok-com">${com}</span>`;
+    if (num) return `<span class="tok-num">${num}</span>`;
+    return `<span class="tok-kw">${kw}</span>`;
+  });
+}
+
+/* 高亮空白：___ 或连续下划线整段作为一个标记；连续代码行聚合为带边框代码块 */
 function formatQuestionText(text) {
   const raw = String(text ?? "");
   const lines = raw.split(/\r\n|\n|\r/);
-  const htmlLines = lines.map(line => {
+  const out = [];
+  let codeBuf = [];
+  const flushCode = () => {
+    if (codeBuf.length) {
+      out.push(`<div class="q-code-block">${codeBuf.join("")}</div>`);
+      codeBuf = [];
+    }
+  };
+  lines.forEach(line => {
+    const isCode = looksLikeCodeLine(line);
     let i = 0;
     let lead = "";
     while (i < line.length) {
@@ -1608,12 +1648,36 @@ function formatQuestionText(text) {
       else break;
     }
     let rest = escapeHtml(line.slice(i));
+    if (isCode) {
+      rest = highlightCCode(rest);
+    } else {
+      flushCode();
+    }
+    rest = rest.replace(/ {2,}/g, m => "&nbsp;".repeat(m.length));
     rest = rest.replace(/%_{2,}/g, m => `<span class="blank">${m}</span>`);
     rest = rest.replace(/(?<![%\w])_{2,}(?!\w)/g, m => `<span class="blank">${m}</span>`);
-    return lead + rest;
+    if (isCode) codeBuf.push(lead + rest + "<br>");
+    else out.push(lead + rest + "<br>");
   });
-  return `<div class="q-code-block">${htmlLines.join("<br>")}</div>`;
+  flushCode();
+  return out.join("");
 }
+
+/* —— 禁止复制代码（设置 noCopyCode 开启时生效） —— */
+function applyNoCopyCode() {
+  const on = !!(data && data.settings && data.settings.noCopyCode);
+  document.body.classList.toggle("no-copy-code", on);
+}
+document.addEventListener("copy", (e) => {
+  if (!document.body.classList.contains("no-copy-code")) return;
+  const sel = window.getSelection ? window.getSelection() : null;
+  if (!sel || !sel.rangeCount || sel.isCollapsed) return;
+  const node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+  if (node && node.closest && node.closest(".q-code-block")) {
+    e.preventDefault();
+    try { e.clipboardData.setData("text/plain", "（题目代码禁止复制）"); } catch (err) {}
+  }
+});
 
 /** 选项展示：关键/连续空格用 ␣ 标出并加提示 */
 function formatOptionDisplay(text) {
@@ -3022,7 +3086,7 @@ function showExplain(ok, q, userAns, timeout = false) {
       <div class="explain-status ${statusClass}">${status}</div>
       <div class="explain-kp">【知识点】${escapeHtml(q.knowledgePoint)}</div>
       ${extra}
-      <div class="explain-body">${escapeHtml(q.explanation)}</div>
+      <div class="explain-body">${formatQuestionText(q.explanation)}</div>
     </div>
   `;
 }
@@ -3568,7 +3632,7 @@ function renderWrongList() {
       <div style="white-space:pre-wrap;font-family:monospace;font-size:0.9rem;margin:8px 0;">${formatQuestionText(s.question)}</div>
       <div class="meta">${ansDisplay}</div>
       ${s.userAns ? `<div class="meta" style="color:#fca5a5;">你的答案：${escapeHtml(String(s.userAns))}</div>` : ""}
-      <div class="exp">${escapeHtml(s.explanation)}</div>
+      <div class="exp">${formatQuestionText(s.explanation)}</div>
       <button class="btn-redo" data-id="${id}">再做一次</button>
     `;
     list.appendChild(div);
@@ -3742,6 +3806,8 @@ function loadSettingsToUI() {
   document.querySelectorAll('input[name="petBless"]').forEach(r => r.checked = (r.value === "1") === blessOn);
   const focusOn = !!gs.focusMode;
   document.querySelectorAll('input[name="focusMode"]').forEach(r => r.checked = (r.value === "1") === focusOn);
+  const nccOn = !!gs.noCopyCode;
+  document.querySelectorAll('input[name="noCopyCode"]').forEach(r => r.checked = (r.value === "1") === nccOn);
 
   // 题库设置
   const comp = getBankSetting("complexity", 2);
@@ -3784,6 +3850,9 @@ function saveSettingsFromUI() {
   data.settings.focusMode = focusEl ? focusEl.value === "1" : false;
   const strictEl = document.querySelector('input[name="strictMode"]:checked');
   data.settings.strictMode = strictEl ? strictEl.value === "1" : true;
+  const nccEl = document.querySelector('input[name="noCopyCode"]:checked');
+  data.settings.noCopyCode = nccEl ? nccEl.value === "1" : false;
+  applyNoCopyCode();
   // 题库级
   const compEl = document.querySelector('input[name="complexity"]:checked');
   if (compEl) setBankSetting("complexity", +compEl.value);
