@@ -2612,8 +2612,13 @@ function renderQuestion() {
   document.getElementById("q-acc").textContent = `正确率 ${acc}%`;
 
   const stars = "★".repeat(q.difficulty) + "☆".repeat(5 - q.difficulty);
-  document.getElementById("question-text").innerHTML =
+  const qTextEl = document.getElementById("question-text");
+  qTextEl.innerHTML =
     `<div class="diff">${stars}</div>` + formatQuestionText(q.question);
+  // 重启入场动画（v1.10.33）
+  qTextEl.classList.remove("q-fade");
+  void qTextEl.offsetWidth;
+  qTextEl.classList.add("q-fade");
 
   const optsEl = document.getElementById("options");
   const fillEl = document.getElementById("fill-area");

@@ -2905,3 +2905,198 @@ select.bank-select {
   .codex-quiz-wrap { flex-direction: column; max-height: 92vh; }
   .codex-quiz-card, .codex-quiz-side { max-width: 100%; }
 }
+
+/* ============================================================
+   v1.10.33 视觉升级：极光背景 / 玻璃拟态 / 光晕按钮 / 微交互
+   ============================================================ */
+
+/* 1) Aurora 极光光斑背景：两个 fixed 伪元素铺在内容层之下，缓慢漂移 */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+}
+body::before {
+  width: 58vw;
+  height: 58vw;
+  min-width: 540px;
+  min-height: 540px;
+  top: -16vw;
+  left: -12vw;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(59, 130, 246, 0.17), transparent 58%),
+    radial-gradient(circle at 72% 70%, rgba(34, 211, 238, 0.11), transparent 62%);
+  animation: aurora-a 18s ease-in-out infinite alternate;
+}
+body::after {
+  width: 64vw;
+  height: 64vw;
+  min-width: 580px;
+  min-height: 580px;
+  bottom: -20vw;
+  right: -14vw;
+  background:
+    radial-gradient(circle at 62% 38%, rgba(139, 92, 246, 0.16), transparent 58%),
+    radial-gradient(circle at 30% 66%, rgba(236, 72, 153, 0.08), transparent 60%);
+  animation: aurora-b 22s ease-in-out infinite alternate;
+}
+@keyframes aurora-a {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(7vw, 4vh, 0) scale(1.14) rotate(10deg); }
+  100% { transform: translate3d(2vw, 9vh, 0) scale(0.95) rotate(-8deg); }
+}
+@keyframes aurora-b {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(-8vw, -5vh, 0) scale(1.16) rotate(-12deg); }
+  100% { transform: translate3d(-3vw, -10vh, 0) scale(0.93) rotate(8deg); }
+}
+
+/* 2) 玻璃拟态：磨砂面板透出极光背景 */
+.home-panel,
+.panel,
+.stat-card,
+.question-area,
+.explain-area {
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+.panel,
+.stat-card {
+  background: rgba(30, 41, 59, 0.66);
+}
+.question-area,
+.explain-area {
+  background: rgba(30, 41, 59, 0.62);
+}
+
+/* 3) 主按钮光晕：hover 时渐变光圈从按钮背后浮现 */
+.btn-primary {
+  position: relative;
+  isolation: isolate;
+}
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #22d3ee);
+  filter: blur(18px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.btn-primary:hover::before,
+.btn-primary:focus-visible::before {
+  opacity: 0.7;
+}
+
+/* 4) 卡片微交互：悬浮上移 + 边框亮起 */
+.stat-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96, 165, 250, 0.55);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.home-mode-tabs button {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.home-mode-tabs button:hover {
+  transform: translateY(-2px);
+}
+.option {
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.option:hover:not(.disabled):not(.next-btn) {
+  transform: translateY(-2px);
+}
+
+/* 5) 做题页入场动画：题目文字 + 选项瀑布式浮现 + 解析淡入 */
+.q-fade {
+  animation: fade-up 0.3s ease both;
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+#options .option {
+  animation: option-in 0.32s ease both;
+}
+#options .option:nth-child(1) { animation-delay: 0.03s; }
+#options .option:nth-child(2) { animation-delay: 0.09s; }
+#options .option:nth-child(3) { animation-delay: 0.15s; }
+#options .option:nth-child(4) { animation-delay: 0.21s; }
+@keyframes option-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+#explain-area > * {
+  animation: fade-in-soft 0.35s ease both;
+}
+@keyframes fade-in-soft {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 6) 标题流光：渐变文字缓慢流动 */
+.title {
+  background-size: 200% auto;
+  animation: title-shimmer 6s linear infinite;
+}
+@keyframes title-shimmer {
+  to { background-position: 200% center; }
+}
+
+/* 7) 模态框弹入 */
+.modal-mask {
+  animation: fadeIn 0.2s ease;
+}
+.modal-card {
+  animation: modal-in 0.28s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 8) 主题化滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 8px;
+  border: 2px solid #0f172a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #475569 transparent;
+}
+
+/* 9) 减弱动态效果偏好：关闭装饰性动画 */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  .title,
+  #options .option,
+  .modal-mask,
+  .modal-card {
+    animation: none !important;
+  }
+}
