@@ -6,9 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="app-version" content="1.10.35">
+  <meta name="app-version" content="1.10.36">
   <title>GESP C++ 一级 · 专项刷题训练</title>
-  <link rel="stylesheet" href="style.css?v=1.10.35">
+  <link rel="stylesheet" href="style.css?v=1.10.36">
 </head>
 <body>
   <div id="app">
@@ -71,6 +71,7 @@
                   <option value="control-flow">分支 · switch · 循环</option>
                   <option value="data-ops">变量与运算</option>
                   <option value="computer-basics">计算机基础</option>
+                  <option value="gen-exam">智能组卷（每日换卷）</option>
                   <option value="real-exam">近年真题风格</option>
                   <option value="gesp2-ascii-cast">二级 · ASCII与类型转换</option>
                 </select>
@@ -100,6 +101,7 @@
                   <option value="control-flow">分支 · 循环</option>
                   <option value="data-ops">变量与运算</option>
                   <option value="computer-basics">计算机基础</option>
+                  <option value="gen-exam">智能组卷</option>
                   <option value="real-exam">近年真题风格</option>
                   <option value="gesp2-ascii-cast">二级 · ASCII与类型转换</option>
                 </select>
@@ -532,7 +534,7 @@
   <canvas id="particles"></canvas>
     <script>
 (function () {
-  var EMBEDDED = "1.10.35";
+  var EMBEDDED = "1.10.36";
   try {
     var forced = localStorage.getItem("gesp_force_reload");
     if (forced && forced === EMBEDDED) localStorage.removeItem("gesp_force_reload");
@@ -545,7 +547,7 @@
     } catch (e) {}
     function go() {
       var path = location.pathname;
-      location.replace(path + "?v=1.10.35&_t=" + Date.now());
+      location.replace(path + "?v=1.10.36&_t=" + Date.now());
     }
     var tasks = [];
     try {
@@ -591,21 +593,22 @@
 })();
 </script>
 
-<script src="config.js?v=1.10.35"></script>
-  <script src="banks/printf-scanf.js?v=1.10.35"></script>
-  <script src="banks/control-flow.js?v=1.10.35"></script>
-  <script src="banks/eval-mode.js?v=1.10.35"></script>
-  <script src="banks/real-exam.js?v=1.10.35"></script>
-  <script src="banks/computer-basics.js?v=1.10.35"></script>
-  <script src="banks/gesp2-ascii-cast.js?v=1.10.35"></script>
-  <script src="banks/data-ops.js?v=1.10.35"></script>
-  <script src="system/pet-data.js?v=1.10.35"></script>
-  <script src="system/pet.js?v=1.10.35"></script>
-  <script src="system/activate-codes.js?v=1.10.35"></script>
-  <script src="system/changelog.js?v=1.10.35"></script>
-  <script src="system/codex-data.js?v=1.10.35"></script>
-  <script src="system/codex.js?v=1.10.35"></script>
-  <script src="system/achievements.js?v=1.10.35"></script>
-  <script src="script.js?v=1.10.35"></script>
+<script src="config.js?v=1.10.36"></script>
+  <script src="banks/printf-scanf.js?v=1.10.36"></script>
+  <script src="banks/control-flow.js?v=1.10.36"></script>
+  <script src="banks/eval-mode.js?v=1.10.36"></script>
+  <script src="banks/real-exam.js?v=1.10.36"></script>
+  <script src="banks/computer-basics.js?v=1.10.36"></script>
+  <script src="banks/gesp2-ascii-cast.js?v=1.10.36"></script>
+  <script src="banks/data-ops.js?v=1.10.36"></script>
+  <script src="banks/generator.js?v=1.10.36"></script>
+  <script src="system/pet-data.js?v=1.10.36"></script>
+  <script src="system/pet.js?v=1.10.36"></script>
+  <script src="system/activate-codes.js?v=1.10.36"></script>
+  <script src="system/changelog.js?v=1.10.36"></script>
+  <script src="system/codex-data.js?v=1.10.36"></script>
+  <script src="system/codex.js?v=1.10.36"></script>
+  <script src="system/achievements.js?v=1.10.36"></script>
+  <script src="script.js?v=1.10.36"></script>
 </body>
 </html>

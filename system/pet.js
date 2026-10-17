@@ -711,6 +711,7 @@ function hatchEgg(eggRarity){
   ps.pets.push(baby);
   if(!ps.activePetId) ps.activePetId=baby.uid;
   ps.gachaCount=(ps.gachaCount||0)+1;
+  if(eggRarity==="SR"){ d.stats=d.stats||{}; d.stats.srEggs=(d.stats.srEggs||0)+1; }
   if(typeof global.saveData==="function") global.saveData(d);
   try{ checkMilestones(); }catch(e){}
   try{ if(typeof global.checkAchievements==="function") global.checkAchievements(buildPetAchieveCtx()); }catch(e){}

@@ -8,7 +8,7 @@
  */
 window.GESP_CONFIG = {
   // 网页版本号（页脚与隐藏菜单显示）
-  version: "1.10.35",
+  version: "1.10.36",
 
   // 默认显示名（无链接后缀、未在设置里改过时使用）
   userName: "同学",
@@ -57,6 +57,7 @@ window.GESP_CONFIG = {
     lzy: "兰贞烨",
     lyh: "刘羽昊",
     ljh: "林济恒",
+    ljh_new: "林济恒",
     lbc: "林柏辰",
     lyq: "林易秋",
     lyx: "卢熠轩",

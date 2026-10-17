@@ -421,6 +421,32 @@ function registerBuiltinDebugTests() {
     saveData(data);
     return "questionStats 已清空";
   });
+  registerDebugTest("题库", "生成器自检（61种子）", () => {
+    const G = window.GESP_GEN;
+    if (!G) return "GESP_GEN 未加载";
+    let bad = 0, min = 99, total = 0;
+    for (let s = 20260101; s < 20260231; s++) {
+      const qs = G.build(s);
+      total += qs.length;
+      if (qs.length < min) min = qs.length;
+      qs.forEach(q => {
+        const set = new Set(q.options.map(String));
+        if (set.size !== q.options.length || q.answer < 0 || q.answer >= q.options.length ||
+            !q.question || !q.explanation || (q.type !== "judge" && q.options.length < 4)) bad++;
+      });
+    }
+    return bad === 0
+      ? `✓ 61 个种子最少 ${min} 题（共 ${total}），结构校验通过`
+      : `发现 ${bad} 个结构问题`;
+  });
+  registerDebugTest("题库", "生成器换卷（重生成当日卷）", () => {
+    const G = window.GESP_GEN;
+    const bank = window.GESP_BANKS && window.GESP_BANKS["gen-exam"];
+    if (!G || !bank) return "未加载";
+    const qs = G.build();
+    bank.staticQuestions = qs;
+    return `已重生成 ${qs.length} 题（当日种子）`;
+  });
 }
 
 /** 测试：播放宠物孵化动画 */
@@ -613,7 +639,7 @@ function buildQuizList(mode, count) {
     };
     const order = orderMap[mode] || [mode, "all"];
     // 为 category 建池
-    ["hardware","storage","process","os","ide","history","type","ident","arith","inc","rel","logic","assign"].forEach(cat => {
+    ["hardware","storage","process","os","ide","history","type","ident","arith","inc","rel","logic","assign","io"].forEach(cat => {
       if (!staticPool[cat]) {
         staticPool[cat] = usableStatic(q => q.category === cat).sort(() => Math.random() - 0.5);
         staticIdx[cat] = 0;
@@ -3432,6 +3458,8 @@ function finishQuiz() {
   if (data.history.length > 80) data.history = data.history.slice(-80);
   const settle = computeSettlement(quiz, acc, duration);
   quiz.settle = settle;
+  // 回写结算词条名称，供「完美词条」等成就读取
+  record.settleTags = (settle.tags || []).map(t => t.name);
   const rawXp = quiz.xp;
   quiz.xp = Math.max(0, Math.round(rawXp * settle.mult));
   quiz.rawXp = rawXp;
@@ -3451,11 +3479,14 @@ function finishQuiz() {
       syncPermitGain = 1;
     }
   }
-  if (!data.stats) data.stats = { totalSessions: 0, perfectSessions: 0, banksPlayed: {} };
-  data.stats.totalSessions = (data.stats.totalSessions || 0) + 1;
-  if (acc === 100) data.stats.perfectSessions = (data.stats.perfectSessions || 0) + 1;
-  data.stats.banksPlayed = data.stats.banksPlayed || {};
-  data.stats.banksPlayed[currentBankId] = true;
+  // 真题模式只判卷：不计入训练次数/题库记录（与「不触发成就」的注释保持一致）
+  if (!quiz.isExam) {
+    if (!data.stats) data.stats = { totalSessions: 0, perfectSessions: 0, banksPlayed: {} };
+    data.stats.totalSessions = (data.stats.totalSessions || 0) + 1;
+    if (acc === 100) data.stats.perfectSessions = (data.stats.perfectSessions || 0) + 1;
+    data.stats.banksPlayed = data.stats.banksPlayed || {};
+    data.stats.banksPlayed[currentBankId] = true;
+  }
   saveData(data);
   if (quiz.isExam) {
     // 真题模式结算：只出判卷结果，不触发成就/连续打卡/宠物奖励
@@ -3484,7 +3515,9 @@ function finishQuiz() {
     if (typeof buildPetAchieveCtx === "function") petCtx = buildPetAchieveCtx();
     else if (typeof window !== "undefined" && window.buildPetAchieveCtx) petCtx = window.buildPetAchieveCtx();
   } catch (e) {}
-  const newly = checkAchievements(Object.assign({
+  // 注意：petCtx（含 last:null）必须放在前面，本次训练的 record 放后面覆盖；
+  // 顺序反了会导致 ctx.last 被覆盖成 null，连击/正确率/竞速/完美词条等成就永远无法解锁
+  const newly = checkAchievements(Object.assign({}, petCtx, {
     last: record,
     stats: data.stats,
     totalXp: data.totalXp,
@@ -3493,7 +3526,7 @@ function finishQuiz() {
     mb: data.mb || 0,
     streak: data.streak,
     level: getPlayerLevelInfo().level
-  }, petCtx));
+  }));
   if (newly.length) {
     record.achievementIds = newly.map(a => a.id);
     // 回写最后一条
@@ -4026,44 +4059,6 @@ if (btnCodexBack) btnCodexBack.onclick = () => {
   const leave = () => { showView("home-view"); updateHome(); };
   if (typeof requestCodexLeave === "function") requestCodexLeave(leave);
   else leave();
-};
-const btnMail = document.getElementById("btn-mail");
-if (btnMail) btnMail.onclick = () => {
-  try {
-    soundUiClick();
-    if (typeof openMailView === "function") {
-      openMailView();
-      return;
-    }
-    if (typeof showView === "function" && document.getElementById("mail-view")) {
-      showView("mail-view");
-      if (typeof renderMailPage === "function") renderMailPage();
-      return;
-    }
-    uiToast("邮箱模块未加载，请刷新页面（Ctrl+F5）", "error");
-  } catch (e) {
-    uiToast("打开邮箱失败：" + (e && e.message || e), "error");
-  }
-};
-const btnMailBack = document.getElementById("btn-mail-back");
-if (btnMailBack) btnMailBack.onclick = () => { soundUiClick(); showView("home-view"); };
-const btnMailAll = document.getElementById("btn-mail-allread");
-if (btnMailAll) btnMailAll.onclick = () => {
-  try {
-    const mail = data.mail;
-    if (!mail || !mail.inbox || !mail.inbox.length) {
-      uiToast("收件箱是空的", "error");
-      return;
-    }
-    mail.inbox.forEach(m => { m.read = true; });
-    saveData(data);
-    if (typeof renderMailPage === "function") renderMailPage();
-    if (typeof updateMailBadges === "function") updateMailBadges();
-    uiToast("已全部标为已读", "success");
-    soundUiOk();
-  } catch (e) {
-    uiToast("操作失败", "error");
-  }
 };
 document.getElementById("btn-achieve").onclick = () => {
   try {
